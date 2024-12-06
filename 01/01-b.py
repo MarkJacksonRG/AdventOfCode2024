@@ -33,7 +33,7 @@ def split_lines_to_two_lists(split_lines):
         list2.append(line[1])
     return list1, list2
 
-split_lines = get_split_input_lines("../02/input.txt")
+split_lines = get_split_input_lines("input.txt")
 list1, list2 = split_lines_to_two_lists(split_lines)
 
 def get_num_occurrences(some_list):
