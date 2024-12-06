@@ -40,12 +40,17 @@ def find_problem_level(line):
 
     return None
 
-def is_safe_report(line):
+def is_line_safe(line):
     problem_level = find_problem_level(line)
     if problem_level is None:
         return True
     without_problem_level = line[:problem_level] + line[problem_level+1:]
-    return find_problem_level(without_problem_level) is None
+    if find_problem_level(without_problem_level) is None:
+        return True
+    without_level_before_problem_level= line[:problem_level-1] + line[problem_level:]
+    if find_problem_level(without_level_before_problem_level) is None:
+        return True
+    return False
 
 # Tests
 split_lines = get_split_input_lines("test.txt")
@@ -61,17 +66,17 @@ assert find_problem_level(split_lines[3]) == 2
 assert find_problem_level(split_lines[4]) == 3
 assert find_problem_level(split_lines[5]) is None
 
-assert is_safe_report(split_lines[0]) == True
-assert is_safe_report(split_lines[1]) == False
-assert is_safe_report(split_lines[2]) == False
-assert is_safe_report(split_lines[3]) == True
-assert is_safe_report(split_lines[4]) == True
-assert is_safe_report(split_lines[5]) == True
+assert is_line_safe(split_lines[0]) == True
+assert is_line_safe(split_lines[1]) == False
+assert is_line_safe(split_lines[2]) == False
+assert is_line_safe(split_lines[3]) == True
+assert is_line_safe(split_lines[4]) == True
+assert is_line_safe(split_lines[5]) == True
 
-# # Actual
-# split_lines = get_split_input_lines("input.txt")
-# number = 0
-# for line in split_lines:
-#     if is_line_safe(line):
-#         number+=1
-# print(f"NUMBER OF SAFE REPORTS = {number}")
+# Actual
+split_lines = get_split_input_lines("input.txt")
+number = 0
+for line in split_lines:
+    if is_line_safe(line):
+        number+=1
+print(f"NUMBER OF SAFE REPORTS = {number}")
