@@ -25,32 +25,28 @@ def get_split_input_lines(filename):
         split_lines.append(line)
     return split_lines
 
-def find_problem_level(line):
+def is_line_safe_simpleminded(line):
     increasing = line[0] < line[1]
     for i in range(len(line)-1):
         a, b = line[i], line[i + 1]
         if a == b:
-            return i+1
+            return False
         if abs(a - b) > 3:
-            return i+1
+            return False
         if increasing and (a > b):
-            return i+1
+            return False
         if not increasing and (a < b):
-            return i+1
+            return False
 
-    return None
+    return True
 
 def is_line_safe(line):
-    problem_level = find_problem_level(line)
-    if problem_level is None:
-        return True
-    without_problem_level = line[:problem_level] + line[problem_level+1:]
-    if find_problem_level(without_problem_level) is None:
-        return True
-    without_level_before_problem_level= line[:problem_level-1] + line[problem_level:]
-    if find_problem_level(without_level_before_problem_level) is None:
-        return True
+    for index_to_remove in range(len(line)):
+        new_line = line[:index_to_remove] + line[index_to_remove+1:]
+        if is_line_safe_simpleminded(new_line):
+            return True
     return False
+
 
 # Tests
 split_lines = get_split_input_lines("test.txt")
@@ -58,13 +54,6 @@ assert len(split_lines) == 6
 for line in split_lines:
     assert len(line)==5
     print(line)
-
-assert find_problem_level(split_lines[0]) is None
-assert find_problem_level(split_lines[1]) == 2
-assert find_problem_level(split_lines[2]) == 3
-assert find_problem_level(split_lines[3]) == 2
-assert find_problem_level(split_lines[4]) == 3
-assert find_problem_level(split_lines[5]) is None
 
 assert is_line_safe(split_lines[0]) == True
 assert is_line_safe(split_lines[1]) == False
