@@ -10,17 +10,22 @@ def get_input_lines():
     return lines.split("\n")
 
 
-lines = get_input_lines()
-split_lines = []
-for line in lines:
-    # Split by spaces
-    line = line.split("   ")
-    assert len(line) == 2
-    # Check the entries are numbers
-    assert line[0].isdigit()
-    assert line[1].isdigit()
+def get_split_input_lines():
+    global split_lines, line
+    lines = get_input_lines()
+    split_lines = []
+    for line in lines:
+        # Split by spaces
+        line = line.split("   ")
+        assert len(line) == 2
+        # Check the entries are numbers
+        assert line[0].isdigit()
+        assert line[1].isdigit()
 
-    split_lines.append(line)
+        split_lines.append(line)
+    return split_lines
+
+split_lines = get_split_input_lines()
 
 for line in split_lines:
     print(f"{line[0]} ---- {line[1]}")
