@@ -53,3 +53,11 @@ assert is_line_safe(split_lines[2]) == False
 assert is_line_safe(split_lines[3]) == False
 assert is_line_safe(split_lines[4]) == False
 assert is_line_safe(split_lines[5]) == True
+
+# Actual
+split_lines = get_split_input_lines("input.txt")
+number = 0
+for line in split_lines:
+    if is_line_safe(line):
+        number+=1
+print(f"NUMBER OF SAFE REPORTS = {number}")
