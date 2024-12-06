@@ -80,3 +80,5 @@ for line in split_lines:
     if is_line_safe(line):
         number+=1
 print(f"NUMBER OF SAFE REPORTS = {number}")
+
+#691 is too low
