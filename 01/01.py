@@ -36,16 +36,16 @@ def split_lines_to_two_lists(split_lines):
 def calculate_difference(sorted_pairs):
     sum_diffs = 0
     for pair in sorted_pairs:
-        print(f"{pair[0]} ---- {pair[1]}")
-        print(f"{abs(int(pair[0]))} ---- {abs(int(pair[1]))}")
+        # print(f"{pair[0]} ---- {pair[1]}")
+        # print(f"{abs(int(pair[0]))} ---- {abs(int(pair[1]))}")
         diff = abs(int(pair[0]) - abs(int(pair[1])))
         sum_diffs += diff
     return sum_diffs
 
 split_lines = get_split_input_lines("test.txt")
 list1, list2 = split_lines_to_two_lists(split_lines)
-for pair in list(zip(list1, list2)):
-    print(f"{pair[0]} ---- {pair[1]}")
+# for pair in list(zip(list1, list2)):
+#     print(f"{pair[0]} ---- {pair[1]}")
 
 print()
 sorted1 = sorted(list1)
@@ -56,7 +56,7 @@ for pair in sorted_pairs:
 
 print()
 print("About to calc")
-print (calculate_difference(sorted_pairs))
+print (f"DIFFERENCE={calculate_difference(sorted_pairs)}")
 
 # for line in split_lines:
 #     print(f"{line[0]} ---- {line[1]}")
