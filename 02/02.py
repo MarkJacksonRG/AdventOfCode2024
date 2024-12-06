@@ -45,4 +45,9 @@ def get_num_occurrences(some_list):
             num_occurrences[item] = 1
     return num_occurrences
 
-print(get_num_occurrences(list2))
+num_occurrences2 = (get_num_occurrences(list2))
+
+similarity_score = 0
+for next in list1:
+    similarity_score += int(next) * num_occurrences2.get(next, 0)
+print(f"SIMILARITY = {similarity_score}")
