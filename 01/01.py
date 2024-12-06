@@ -2,17 +2,17 @@
 # and print the content of the file
 # if the file does not exist, print "File not found"
 
-def get_input_lines():
-    with open("input.txt", "r") as file:
+def get_input_lines(filename):
+    with open(filename, "r") as file:
         lines = file.read()
 
     # split into separate lines
     return lines.split("\n")
 
 
-def get_split_input_lines():
+def get_split_input_lines(filename):
     global split_lines, line
-    lines = get_input_lines()
+    lines = get_input_lines(filename)
     split_lines = []
     for line in lines:
         # Split by spaces
@@ -25,7 +25,7 @@ def get_split_input_lines():
         split_lines.append(line)
     return split_lines
 
-split_lines = get_split_input_lines()
+split_lines = get_split_input_lines("input.txt")
 
 for line in split_lines:
     print(f"{line[0]} ---- {line[1]}")
