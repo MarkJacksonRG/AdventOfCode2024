@@ -25,12 +25,40 @@ def get_split_input_lines(filename):
         split_lines.append(line)
     return split_lines
 
-split_lines = get_split_input_lines("input.txt")
+def split_lines_to_two_lists(split_lines):
+    list1 = []
+    list2 = []
+    for line in split_lines:
+        list1.append(line[0])
+        list2.append(line[1])
+    return list1, list2
 
-for line in split_lines:
-    print(f"{line[0]} ---- {line[1]}")
+def calculate_difference(split_lines):
+    sum_diffs = 0
+    for line in split_lines:
+        print(f"{line[0]} ---- {line[1]}")
+        print(f"{abs(int(line[0]))} ---- {abs(int(line[1]))}")
+        diff = abs(int(line[0]) - abs(int(line[1])))
+        sum_diffs += diff
+    return sum_diffs
 
-print(len(split_lines))
+split_lines = get_split_input_lines("test.txt")
+list1, list2 = split_lines_to_two_lists(split_lines)
+for pair in zip(list1, list2):
+    print(f"{pair[0]} ---- {pair[1]}")
+
+print()
+sorted1 = sorted(list1)
+sorted2 = sorted(list2)
+for pair in zip(sorted1, sorted2):
+    print(f"{pair[0]} ---- {pair[1]}")
+
+# print (calculate_difference(sorted1, sorted2))
+
+# for line in split_lines:
+#     print(f"{line[0]} ---- {line[1]}")
+#
+# print(len(split_lines))
 
 
 
