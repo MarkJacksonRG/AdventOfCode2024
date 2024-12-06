@@ -2,15 +2,30 @@
 # and print the content of the file
 # if the file does not exist, print "File not found"
 
-with open("input.txt", "r") as file:
-    lines = file.read()
+def get_input_lines():
+    with open("input.txt", "r") as file:
+        lines = file.read()
 
     # split into separate lines
-    lines = lines.split("\n")
+    return lines.split("\n")
 
-    for line in lines:
-        print(line)
-    print (len(lines))
+
+lines = get_input_lines()
+split_lines = []
+for line in lines:
+    # Split by spaces
+    line = line.split("   ")
+    assert len(line) == 2
+    # Check the entries are numbers
+    assert line[0].isdigit()
+    assert line[1].isdigit()
+
+    split_lines.append(line)
+
+for line in split_lines:
+    print(f"{line[0]} ---- {line[1]}")
+
+print(len(split_lines))
 
 
 
