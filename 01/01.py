@@ -42,7 +42,7 @@ def calculate_difference(sorted_pairs):
         sum_diffs += diff
     return sum_diffs
 
-split_lines = get_split_input_lines("test.txt")
+split_lines = get_split_input_lines("input.txt")
 list1, list2 = split_lines_to_two_lists(split_lines)
 # for pair in list(zip(list1, list2)):
 #     print(f"{pair[0]} ---- {pair[1]}")
