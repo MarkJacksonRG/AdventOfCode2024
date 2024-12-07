@@ -15,6 +15,8 @@ def get_mul(s):
         to_return.append((int(numbers[0]), int(numbers[1])))
     return to_return
 
+def sum_of_products(input):
+    return sum([x*y for x, y in mul])
 
 mul = get_mul(test)
 
@@ -22,3 +24,5 @@ assert mul[0] == (2, 4)
 assert mul[1] == (5, 5)
 assert mul[2] == (11, 8)
 assert mul[3] == (8, 5)
+
+assert sum_of_products(mul) == 161
