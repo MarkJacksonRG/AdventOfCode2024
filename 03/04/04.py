@@ -41,9 +41,7 @@ def get_directions(board: Board, x, y, c):
         for dy in (-1, 0, 1):
             if dx == 0 and dy == 0:
                 continue
-            new_x = x + dx
-            new_y = y + dy
-            if board.get(new_x, new_y) == c:
+            if board.get(x + dx, y + dy) == c:
                 to_return.append((dx, dy))
     return to_return
 
@@ -56,12 +54,9 @@ assert ret == [(-1, 0), (1, 0), (1, 1)]
 def count_xmas(board: Board, x, y):
     count = 0
     for dx, dy in get_directions(board, x, y, "M"):
-        try:
-            if board.get(x + 2 * dx, y + 2 * dy) == "A":
-                if board.get(x + 3 * dx, y + 3 * dy) == "S":
-                    count += 1
-        except IndexError:
-            pass
+        if board.get(x + 2 * dx, y + 2 * dy) == "A":
+            if board.get(x + 3 * dx, y + 3 * dy) == "S":
+                count += 1
     return count
 
 ret = count_xmas(test_board, 4, 1)
