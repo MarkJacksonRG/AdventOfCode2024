@@ -22,3 +22,23 @@ test_ret = xmas_or_dot(["ZXMASZ", "XMAS"])
 print(test_ret)
 assert test_ret[0] == list(".XMAS.")
 assert test_ret[1] == list("XMAS")
+
+def get_directions(lines, x, y, c):
+    to_return = []
+    for dx in (-1, 0, 1):
+        for dy in (-1, 0, 1):
+            if dx == 0 and dy == 0:
+                continue
+            new_x = x + dx
+            new_y = y + dy
+            if new_x < 0 or new_x >= len(lines):
+                continue
+            if new_y < 0 or new_y >= len(lines[new_x]):
+                continue
+            if (lines[new_x][new_y] == c):
+                to_return.append((dx, dy))
+    return to_return
+
+test_dotted = xmas_or_dot(test_lines)
+
+assert test_dotted[1][4] == "X"
