@@ -10,11 +10,7 @@ test_lines = get_input_lines("test.txt")
 assert len(test_lines) == 10
 
 def xmas_or_dot(lines):
-    to_return = []
-    for l in lines:
-        s = [c if c in "XMAS" else "." for c in l]
-        to_return.append(s)
-    return to_return
+    return [ [c if c in "XMAS" else "." for c in l] for l in lines ]
 
 test_ret = xmas_or_dot(["ZXMASZ", "XMAS"])
 print(test_ret)
