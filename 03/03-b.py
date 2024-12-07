@@ -29,23 +29,23 @@ def get_mul(s):
 def sum_of_products(input):
     return sum([x*y for x, y in input])
 
-mul = get_mul(test_1)
+mul1 = get_mul(test_1)
 
-assert mul[0] == (2, 4)
-assert mul[1] == (5, 5)
-assert mul[2] == (11, 8)
-assert mul[3] == (8, 5)
+assert mul1[0] == (2, 4)
+assert mul1[1] == (5, 5)
+assert mul1[2] == (11, 8)
+assert mul1[3] == (8, 5)
 
-assert sum_of_products(mul) == 161
+assert sum_of_products(mul1) == 161
 
-mul = get_mul(test_2)
+mul2 = get_mul(test_2)
 
-assert sum_of_products(mul) == 48
+assert sum_of_products(mul2) == 48
 
 
-lines = get_input_lines("03\input.txt")
-print (lines)
-real_mul = get_mul(lines)
+real_lines = get_input_lines("03\input.txt")
+print (real_lines)
+real_mul = get_mul(real_lines)
 print(len(real_mul))
 
 answer = sum_of_products(real_mul)
