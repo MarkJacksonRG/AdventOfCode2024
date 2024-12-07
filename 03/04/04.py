@@ -1,5 +1,5 @@
 # test.txt
-# XMAX occurs 18 times
+# XMAS occurs 18 times
 
 def get_input_lines(filename):
     with open(filename, "r") as file:
@@ -16,10 +16,7 @@ def xmas_or_dot(lines):
     for l in lines:
         s = ""
         for c in l:
-            if c in "XMAS":
-                s += c
-            else: 
-                s += "."
+            s += c if c in "XMAS" else "."
         to_return.append(s)
     return to_return
 
