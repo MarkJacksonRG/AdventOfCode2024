@@ -23,6 +23,7 @@ print(test_ret)
 assert test_ret[0] == list(".XMAS.")
 assert test_ret[1] == list("XMAS")
 
+# TODO refactor! here x means up/down and y means left/right!!
 def get_directions(lines, x, y, c):
     to_return = []
     for dx in (-1, 0, 1):
@@ -44,3 +45,14 @@ test_dotted = xmas_or_dot(test_lines)
 assert test_dotted[1][4] == "X"
 ret = get_directions(test_dotted, 1, 4, "M")
 assert ret == [(0, -1), (0, 1), (1, 1)]
+
+def count_xmas(lines, x, y):
+    count = 0
+    for dx, dy in get_directions(lines, x, y, "M"):
+        if (lines[x + 2*dx][y + 2*dy] == "A"):
+            if (lines[x + 3*dx][y + 3*dy] == "S"):
+                count += 1
+    return count
+
+ret = count_xmas(test_dotted, 1, 4)
+assert ret == 1
