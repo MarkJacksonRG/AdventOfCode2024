@@ -42,3 +42,5 @@ def get_directions(lines, x, y, c):
 test_dotted = xmas_or_dot(test_lines)
 
 assert test_dotted[1][4] == "X"
+ret = get_directions(test_dotted, 1, 4, "M")
+assert ret == [(0, -1), (0, 1), (1, 1)]
