@@ -91,3 +91,8 @@ def count_all_xmas(board: Board):
 
 ret = count_all_xmas(test_board)
 assert ret == 18
+
+lines = get_input_lines("input.txt")
+board = Board(lines)
+ret = count_all_xmas(board)
+print(f"XMAS COUNT={ret}")
