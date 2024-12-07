@@ -1,5 +1,5 @@
 # test.txt
-# XMAS occurs 18 times
+# an X-MAS appears 9 times
 
 def get_input_lines(filename):
     with open(filename, "r") as file:
@@ -35,64 +35,32 @@ class Board:
     def get_y_range(self):
         return range(len(self.dotted))
 
-def get_directions(board: Board, x, y, c):
-    to_return = []
-    for dx in (-1, 0, 1):
-        for dy in (-1, 0, 1):
-            if dx == 0 and dy == 0:
-                continue
-            if board.get(x + dx, y + dy) == c:
-                to_return.append((dx, dy))
-    return to_return
+    def get_trifecta(self, x, y, direction):
+        as_list = [self.get(x + delta * direction[0], y + delta * direction[1]) for delta in (-1, 0, 1)]
+        return ''.join(as_list)
 
 test_board = Board(test_lines)
 
 assert test_board.get(4, 1) == "X"
-ret = get_directions(test_board, 4, 1, "M")
-assert ret == [(-1, 0), (1, 0), (1, 1)]
+assert test_board.get(-1, -1) == "."
+assert test_board.get_trifecta(1, 1, (1, 1)) == "MSX"
+assert test_board.get_trifecta(1, 1, (-1, 1)) == "MSA"
 
-def count_xmas(board: Board, x, y):
-    assert board.get(x, y) == "X", f"Expected X not {test_board.get(x, y)}"
+def count_all_x_mas(board: Board):
     count = 0
-    for dx, dy in get_directions(board, x, y, "M"):
-        if board.get(x + 2 * dx, y + 2 * dy) == "A":
-            if board.get(x + 3 * dx, y + 3 * dy) == "S":
+    all_mas = ["MAS", "SAM"]
+    for x in board.get_x_range():
+        for y in board.get_y_range():
+            t1 = board.get_trifecta(x, y, (1, 1))
+            t2 = board.get_trifecta(x, y, (-1, 1))
+            if t1 in all_mas and t2 in all_mas:
                 count += 1
     return count
 
-#   0123456789
-# 0 ....XXMAS. 0
-# 1 .SAMXMS... 1
-# 2 ...S..A... 2
-# 3 ..A.A.MS.X 3
-# 4 XMASAMX.MM 4
-# 5 X.....XA.A 5
-# 6 S.S.S.S.SS 6
-# 7 .A.A.A.A.A 7
-# 8 ..M.M.M.MM 8
-# 9 .X.X.XMASX 9
-#   0123456789
-assert count_xmas(test_board, 4, 1) == 1
-assert count_xmas(test_board, 4, 0) == 1
-assert count_xmas(test_board, 4, 1) == 1
-assert count_xmas(test_board, 3, 9) == 2
-assert count_xmas(test_board, 4, 0) == 1
-assert count_xmas(test_board, 6, 4) == 2
-assert count_xmas(test_board, 6, 5) == 1
-assert count_xmas(test_board, 1, 9) == 1
-
-def count_all_xmas(board: Board):
-    count = 0
-    for x in board.get_x_range():
-        for y in board.get_y_range():
-            if board.get(x, y) == "X":
-                count += count_xmas(board, x, y)
-    return count
-
-ret = count_all_xmas(test_board)
-assert ret == 18
+ret = count_all_x_mas(test_board)
+assert ret == 9
 
 lines = get_input_lines("input.txt")
 board = Board(lines)
-ret = count_all_xmas(board)
+ret = count_all_x_mas(board)
 print(f"XMAS COUNT={ret}")
