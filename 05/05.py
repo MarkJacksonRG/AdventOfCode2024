@@ -54,3 +54,17 @@ assert is_update_in_right_order(updates[2], rules) == True
 assert is_update_in_right_order(updates[3], rules) == False
 assert is_update_in_right_order(updates[4], rules) == False
 assert is_update_in_right_order(updates[5], rules) == False
+
+def middle_page(aList):
+    return aList[int(len(aList)/2)]
+
+assert middle_page([75,47,61,53,29]) == 61
+
+def get_sum_of_middle_pages_for_valid_updates(rules, updates):
+    return sum([middle_page(update) for update in updates if is_update_in_right_order(update, rules)])
+
+assert get_sum_of_middle_pages_for_valid_updates(rules, updates) == 143
+
+lines = get_input_lines("input.txt")
+rules, updates = get_rules(lines)
+print(f"ANSWER={get_sum_of_middle_pages_for_valid_updates(rules, updates)}")
