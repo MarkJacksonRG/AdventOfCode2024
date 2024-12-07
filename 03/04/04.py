@@ -49,10 +49,24 @@ assert ret == [(0, -1), (0, 1), (1, 1)]
 def count_xmas(lines, x, y):
     count = 0
     for dx, dy in get_directions(lines, x, y, "M"):
-        if (lines[x + 2*dx][y + 2*dy] == "A"):
-            if (lines[x + 3*dx][y + 3*dy] == "S"):
-                count += 1
+        try:
+            if (lines[x + 2*dx][y + 2*dy] == "A"):
+                if (lines[x + 3*dx][y + 3*dy] == "S"):
+                    count += 1
+        except IndexError:
+            pass
     return count
 
 ret = count_xmas(test_dotted, 1, 4)
 assert ret == 1
+
+def count_all_xmas(lines):
+    count = 0
+    for x in range(len(lines)):
+        for y in range(len(lines[x])):
+            if lines[x][y] == "X":
+                count += count_xmas(lines, x, y)
+    return count
+
+ret = count_all_xmas(test_dotted)
+assert ret == 18
