@@ -1,9 +1,4 @@
-# test.txt
-# its 143
 from dataclasses import dataclass
-from os.path import realpath
-from pickletools import read_long1
-
 
 def get_input_lines(filename):
     with open(filename, "r") as file:
