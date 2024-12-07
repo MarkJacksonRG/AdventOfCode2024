@@ -1,6 +1,3 @@
-# test.txt
-# an X-MAS appears 9 times
-
 def get_input_lines(filename):
     with open(filename, "r") as file:
         lines = file.read()
@@ -60,7 +57,7 @@ def count_all_x_mas(board: Board):
 ret = count_all_x_mas(test_board)
 assert ret == 9
 
-lines = get_input_lines("input.txt")
-board = Board(lines)
-ret = count_all_x_mas(board)
+real_lines = get_input_lines("input.txt")
+real_board = Board(real_lines)
+ret = count_all_x_mas(real_board)
 print(f"XMAS COUNT={ret}")
