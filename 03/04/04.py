@@ -52,6 +52,7 @@ ret = get_directions(test_board, 4, 1, "M")
 assert ret == [(-1, 0), (1, 0), (1, 1)]
 
 def count_xmas(board: Board, x, y):
+    assert board.get(x, y) == "X"
     count = 0
     for dx, dy in get_directions(board, x, y, "M"):
         if board.get(x + 2 * dx, y + 2 * dy) == "A":
@@ -59,8 +60,20 @@ def count_xmas(board: Board, x, y):
                 count += 1
     return count
 
+#   0123456789
+# 0 ....XXMAS.
+# 1 .SAMXMS...
+# 2 ...S..A...
+# 3 ..A.A.MS.X
+# 4 XMASAMX.MM
+# 5 X.....XA.A
+# 6 S.S.S.S.SS
+# 7 .A.A.A.A.A
+# 8 ..M.M.M.MM
+# 9 .X.X.XMASX
 ret = count_xmas(test_board, 4, 1)
 assert ret == 1
+assert count_xmas(test_board, 4, 0) == 1
 
 def count_all_xmas(board: Board):
     count = 0
