@@ -24,10 +24,10 @@ class Board:
 
     def get(self, x, y):
         # x means left/right and y means up/down
-        try:
+        if x not in self.get_x_range() or y not in self.get_y_range():
+            return "."
+        else:
             return self.dotted[y][x]
-        except IndexError:
-            return '.'
 
     def get_x_range(self):
         return range(len(self.dotted[0]))
@@ -78,6 +78,8 @@ assert count_xmas(test_board, 4, 1) == 1
 assert count_xmas(test_board, 3, 9) == 2
 assert count_xmas(test_board, 4, 0) == 1
 assert count_xmas(test_board, 6, 4) == 2
+assert count_xmas(test_board, 6, 5) == 1
+assert count_xmas(test_board, 1, 9) == 1
 
 def count_all_xmas(board: Board):
     count = 0
@@ -88,4 +90,4 @@ def count_all_xmas(board: Board):
     return count
 
 ret = count_all_xmas(test_board)
-# assert ret == 18
+assert ret == 18
