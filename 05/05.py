@@ -1,6 +1,8 @@
 # test.txt
 # its 143
 from dataclasses import dataclass
+from os.path import realpath
+from pickletools import read_long1
 
 
 def get_input_lines(filename):
@@ -33,11 +35,11 @@ def get_rules(lines):
 test_lines = get_input_lines("test.txt")
 assert len(test_lines) == 28
 
-rules, updates = get_rules(test_lines)
-assert len(rules) == 21
-assert rules[0] == PrintRule(47, 53)
-assert len(updates) == 6
-assert updates[0] == [75,47,61,53,29]
+test_rules, test_updates = get_rules(test_lines)
+assert len(test_rules) == 21
+assert test_rules[0] == PrintRule(47, 53)
+assert len(test_updates) == 6
+assert test_updates[0] == [75, 47, 61, 53, 29]
 
 def is_update_in_right_order(update, rules):
     for rule in rules:
@@ -48,23 +50,23 @@ def is_update_in_right_order(update, rules):
                 return False
     return True
 
-assert is_update_in_right_order(updates[0], rules) == True
-assert is_update_in_right_order(updates[1], rules) == True
-assert is_update_in_right_order(updates[2], rules) == True
-assert is_update_in_right_order(updates[3], rules) == False
-assert is_update_in_right_order(updates[4], rules) == False
-assert is_update_in_right_order(updates[5], rules) == False
+assert is_update_in_right_order(test_updates[0], test_rules) == True
+assert is_update_in_right_order(test_updates[1], test_rules) == True
+assert is_update_in_right_order(test_updates[2], test_rules) == True
+assert is_update_in_right_order(test_updates[3], test_rules) == False
+assert is_update_in_right_order(test_updates[4], test_rules) == False
+assert is_update_in_right_order(test_updates[5], test_rules) == False
 
-def middle_page(aList):
-    return aList[int(len(aList)/2)]
+def middle_page(a_list):
+    return a_list[int(len(a_list) / 2)]
 
 assert middle_page([75,47,61,53,29]) == 61
 
 def get_sum_of_middle_pages_for_valid_updates(rules, updates):
     return sum([middle_page(update) for update in updates if is_update_in_right_order(update, rules)])
 
-assert get_sum_of_middle_pages_for_valid_updates(rules, updates) == 143
+assert get_sum_of_middle_pages_for_valid_updates(test_rules, test_updates) == 143
 
-lines = get_input_lines("input.txt")
-rules, updates = get_rules(lines)
-print(f"ANSWER={get_sum_of_middle_pages_for_valid_updates(rules, updates)}")
+real_lines = get_input_lines("input.txt")
+real_rules, real_updates = get_rules(real_lines)
+print(f"ANSWER={get_sum_of_middle_pages_for_valid_updates(real_rules, real_updates)}")
