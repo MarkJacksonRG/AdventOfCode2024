@@ -20,7 +20,7 @@ def get_mul(s):
     return to_return
 
 def sum_of_products(input):
-    return sum([x*y for x, y in mul])
+    return sum([x*y for x, y in input])
 
 mul = get_mul(test)
 
