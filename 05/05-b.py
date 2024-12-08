@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+from functools import cmp_to_key
+
 
 def get_input_lines(filename):
     with open(filename, "r") as file:
@@ -79,10 +81,18 @@ def get_sum_of_middle_pages_for_sorted_invalid_updates(rules, updates):
     total = 0
     for update in updates:
         if not is_update_in_right_order(update, rules):
-            sorted_update = list(sorted(update, key=lambda x: custom_comparator(x, x, rules)))
+            sorted_update = sort_update(update, rules)
             total += middle_page(sorted_update)
     return total
 
+
+def sort_update(update, rules):
+    def custom_comparator_for_sort(a, b):
+        return custom_comparator(a, b, rules)
+
+    return list(sorted(update, key=cmp_to_key(custom_comparator_for_sort)))
+
+assert sort_update([75,97,47,61,53], test_rules) == [97,75,47,61,53]
 
 test_3 = get_sum_of_middle_pages_for_sorted_invalid_updates(test_rules, [test_updates[3]])
 assert test_3 == 47
