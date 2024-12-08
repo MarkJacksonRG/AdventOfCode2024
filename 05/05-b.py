@@ -40,11 +40,13 @@ assert test_updates[0] == [75, 47, 61, 53, 29]
 
 def is_update_in_right_order(update, rules):
     for rule in rules:
-        if rule.first in update and rule.second in update:
+        try:
             first_index = update.index(rule.first)
             second_index = update.index(rule.second)
-            if first_index > second_index:
-                return False
+        except ValueError:
+            continue
+        if first_index > second_index:
+            return False
     return True
 
 assert is_update_in_right_order(test_updates[0], test_rules) == True
