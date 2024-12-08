@@ -74,8 +74,21 @@ assert custom_comparator(-1, -2, test_rules) == 0
 assert custom_comparator(53, 13, test_rules) == -1
 assert custom_comparator(13, 53, test_rules) == 1
 
-# assert get_sum_of_middle_pages_for_valid_updates(test_rules, test_updates) == 143
+
+def get_sum_of_middle_pages_for_sorted_invalid_updates(rules, updates):
+    total = 0
+    for update in updates:
+        if not is_update_in_right_order(update, rules):
+            sorted_update = list(sorted(update, key=lambda x: custom_comparator(x, x, rules)))
+            total += middle_page(sorted_update)
+    return total
+
+
+test_3 = get_sum_of_middle_pages_for_sorted_invalid_updates(test_rules, [test_updates[3]])
+assert test_3 == 47
+
+assert get_sum_of_middle_pages_for_sorted_invalid_updates(test_rules, test_updates) == 123
 
 real_lines = get_input_lines("input.txt")
 real_rules, real_updates = get_rules(real_lines)
-# print(f"ANSWER={get_sum_of_middle_pages_for_valid_updates(real_rules, real_updates)}")
+print(f"ANSWER={get_sum_of_middle_pages_for_sorted_invalid_updates(real_rules, real_updates)}")
