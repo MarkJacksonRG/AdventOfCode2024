@@ -59,7 +59,7 @@ def middle_page(a_list):
 
 assert middle_page([75,47,61,53,29]) == 61
 
-def custom_comparator(a, b, rules):
+def comparator(a, b, rules):
     a_b_rule = next((x for x in rules if x.first == a and x.second == b), None)
     if a_b_rule:
         return -1
@@ -69,12 +69,12 @@ def custom_comparator(a, b, rules):
     # TODO perhaps handle transitive rules!?
     return 0
 
-assert custom_comparator(47, 53, test_rules) == -1
-assert custom_comparator(53, 47, test_rules) == 1
-assert custom_comparator(47, 47, test_rules) == 0
-assert custom_comparator(-1, -2, test_rules) == 0
-assert custom_comparator(53, 13, test_rules) == -1
-assert custom_comparator(13, 53, test_rules) == 1
+assert comparator(47, 53, test_rules) == -1
+assert comparator(53, 47, test_rules) == 1
+assert comparator(47, 47, test_rules) == 0
+assert comparator(-1, -2, test_rules) == 0
+assert comparator(53, 13, test_rules) == -1
+assert comparator(13, 53, test_rules) == 1
 
 
 def get_sum_of_middle_pages_for_sorted_invalid_updates(rules, updates):
@@ -88,7 +88,7 @@ def get_sum_of_middle_pages_for_sorted_invalid_updates(rules, updates):
 
 def sort_update(update, rules):
     def custom_comparator_for_sort(a, b):
-        return custom_comparator(a, b, rules)
+        return comparator(a, b, rules)
 
     return list(sorted(update, key=cmp_to_key(custom_comparator_for_sort)))
 
@@ -101,4 +101,6 @@ assert get_sum_of_middle_pages_for_sorted_invalid_updates(test_rules, test_updat
 
 real_lines = get_input_lines("input.txt")
 real_rules, real_updates = get_rules(real_lines)
-print(f"ANSWER={get_sum_of_middle_pages_for_sorted_invalid_updates(real_rules, real_updates)}")
+real_answer = get_sum_of_middle_pages_for_sorted_invalid_updates(real_rules, real_updates)
+assert real_answer == 4884
+print(f"ANSWER={real_answer}")
