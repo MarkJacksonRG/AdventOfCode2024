@@ -66,7 +66,7 @@ def comparator(a, b, rules):
     b_a_rule = next((x for x in rules if x.first == b and x.second == a), None)
     if b_a_rule:
         return 1
-    # TODO perhaps handle transitive rules!?
+    # I thought I might have to handle transitive rules: a|b and b|c => a|c. But it turns out I don't.
     return 0
 
 assert comparator(47, 53, test_rules) == -1
@@ -87,10 +87,7 @@ def get_sum_of_middle_pages_for_sorted_invalid_updates(rules, updates):
 
 
 def sort_update(update, rules):
-    def custom_comparator_for_sort(a, b):
-        return comparator(a, b, rules)
-
-    return list(sorted(update, key=cmp_to_key(custom_comparator_for_sort)))
+    return list(sorted(update, key=cmp_to_key(lambda a, b: comparator(a, b, rules))))
 
 assert sort_update([75,97,47,61,53], test_rules) == [97,75,47,61,53]
 
