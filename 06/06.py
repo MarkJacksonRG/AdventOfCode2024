@@ -88,3 +88,8 @@ def count_positions_visited(board):
     return count
 
 assert count_positions_visited(test_board) == 41
+
+real_lines = get_input_lines("input.txt")
+real_board = Board(real_lines)
+real_answer = count_positions_visited(real_board)
+print(f"ANSWER = {real_answer}")
