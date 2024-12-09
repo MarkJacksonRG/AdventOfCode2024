@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 
 def get_input_lines(filename):
     with open(filename, "r") as file:
@@ -35,3 +37,21 @@ assert test_board.get(-1, 6) == "-"
 assert test_board.get(10, 6) == "-"
 assert test_board.get(4, -1) == "-"
 assert test_board.get(10, 10) == "-"
+
+@dataclass
+class Guard:
+    x: int
+    y: int
+    direction: tuple[int, int]
+
+    def move(self, board):
+        if board.get(self.x + self.direction[0], self.y + self.direction[1]) == "#":
+            self.direction = (-self.direction[1], -self.direction[0])
+
+        self.x += self.direction[0]
+        self.y += self.direction[1]
+
+        return self
+
+test_guard = Guard(4, 6, (0, -1))
+assert test_guard.move(test_board) == Guard(4, 5, (0, -1))
