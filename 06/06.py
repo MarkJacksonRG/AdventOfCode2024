@@ -9,9 +9,6 @@ def get_input_lines(filename):
 test_lines = get_input_lines("test.txt")
 assert len(test_lines) == 10
 
-def xmas_or_dot(lines):
-    return [ [c if c in "XMAS" else "." for c in l] for l in lines ]
-
 class Board:
     def __init__(self, lines):
         self.lines = [list(l) for l in lines]
@@ -92,4 +89,5 @@ assert count_positions_visited(test_board) == 41
 real_lines = get_input_lines("input.txt")
 real_board = Board(real_lines)
 real_answer = count_positions_visited(real_board)
+assert real_answer == 4559
 print(f"ANSWER = {real_answer}")
