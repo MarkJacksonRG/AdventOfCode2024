@@ -18,7 +18,7 @@ class Board:
         assert all(len(row) == len(self.lines[0]) for row in self.lines)
 
     def get(self, x, y):
-        # x means left/right and y means up/down
+        # x means left/right (positive is right) and y means up/down (positive is down)
         if x not in self.get_x_range() or y not in self.get_y_range():
             return "-"
         else:
@@ -46,7 +46,7 @@ class Guard:
 
     def move(self, board):
         if board.get(self.x + self.direction[0], self.y + self.direction[1]) == "#":
-            self.direction = (-self.direction[1], -self.direction[0])
+            self.direction = (-self.direction[1], self.direction[0])
 
         self.x += self.direction[0]
         self.y += self.direction[1]
@@ -55,3 +55,7 @@ class Guard:
 
 test_guard = Guard(4, 6, (0, -1))
 assert test_guard.move(test_board) == Guard(4, 5, (0, -1))
+test_guard = Guard(4, 1, (0, -1))
+assert test_guard.move(test_board) == Guard(5, 1, (1, 0))
+test_guard = Guard(3, 0, (1, 0))
+assert test_guard.move(test_board) == Guard(3, 1, (0, 1))
