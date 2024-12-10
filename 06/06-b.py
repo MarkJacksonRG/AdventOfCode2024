@@ -1,3 +1,4 @@
+import copy
 from dataclasses import dataclass
 
 
@@ -101,6 +102,12 @@ def count_positions_visited(board: Board):
 
 test_count, test_cycle = count_positions_visited(test_board)
 assert test_count == 41, False
+
+# Test the cycle detection mechanism by adding a cycle
+cycle_board = Board(get_input_lines("test.txt"))
+cycle_board.set(3, 6, "#")
+cycle_count, cycle_cycle = count_positions_visited(cycle_board)
+assert cycle_cycle == True
 
 real_lines = get_input_lines("input.txt")
 real_board = Board(real_lines)
