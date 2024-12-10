@@ -76,7 +76,7 @@ assert test_guard.move(test_board) == Guard(5, 1, (1, 0))
 test_guard = Guard(3, 0, (1, 0))
 assert test_guard.move(test_board) == Guard(3, 1, (0, 1))
 
-def count_positions_visited(board: Board):
+def is_board_cycle(board: Board):
     # Find initial guard location: it's the first "^" anywhere in the board
     guard: Guard | None = None
     for y in board.get_y_range():
@@ -86,32 +86,27 @@ def count_positions_visited(board: Board):
                 break
     assert guard is not None
 
-    count = 0
     cycle = False
     while board.get(guard.x, guard.y) != "-":
-        if board.get(guard.x, guard.y) != "X":
-            count += 1
-        board.set(guard.x, guard.y, "X")
         if guard.direction in board.visited[guard.y][guard.x]:
             cycle = True
             break
         board.mark_visited(guard.x, guard.y, guard.direction)
         guard.move(board)
-    return count, cycle
+    return cycle
 
 
-test_count, test_cycle = count_positions_visited(test_board)
-assert test_count == 41, False
+test_cycle = is_board_cycle(test_board)
+assert test_cycle == False
 
 # Test the cycle detection mechanism by adding a cycle
 cycle_board = Board(get_input_lines("test.txt"))
 cycle_board.set(3, 6, "#")
-cycle_count, cycle_cycle = count_positions_visited(cycle_board)
+cycle_cycle = is_board_cycle(cycle_board)
 assert cycle_cycle == True
 
 real_lines = get_input_lines("input.txt")
 real_board = Board(real_lines)
-real_answer, real_cycle = count_positions_visited(real_board)
-assert real_answer == 4559
+real_cycle = is_board_cycle(real_board)
 assert real_cycle == False
-print(f"ANSWER = {real_answer}")
+# print(f"ANSWER = {real_answer}")
