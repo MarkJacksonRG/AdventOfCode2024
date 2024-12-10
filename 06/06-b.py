@@ -12,6 +12,12 @@ assert len(test_lines) == 10
 class Board:
     def __init__(self, lines):
         self.lines = [list(l) for l in lines]
+        self.visited: list[list[tuple[int, int]]] = []
+        for l in lines:
+            next_list: list[tuple[int, int]] = []
+            self.visited.append(next_list)
+            for c in l:
+                next_list.append(list())
         assert all(len(row) == len(self.lines[0]) for row in self.lines)
 
     def get(self, x, y):
@@ -23,6 +29,9 @@ class Board:
 
     def set(self, x, y, value):
         self.lines[y][x] = value
+
+    def mark_visited(self, x, y, direction: tuple[int, int]):
+        self.visited[y][x].append(direction)
 
     def get_x_range(self):
         return range(len(self.lines[0]))
@@ -66,9 +75,9 @@ assert test_guard.move(test_board) == Guard(5, 1, (1, 0))
 test_guard = Guard(3, 0, (1, 0))
 assert test_guard.move(test_board) == Guard(3, 1, (0, 1))
 
-def count_positions_visited(board):
+def count_positions_visited(board: Board):
     # Find initial guard location: it's the first "^" anywhere in the board
-    guard = None
+    guard: Guard | None = None
     for y in board.get_y_range():
         for x in board.get_x_range():
             if board.get(x, y) == "^":
@@ -77,17 +86,25 @@ def count_positions_visited(board):
     assert guard is not None
 
     count = 0
+    cycle = False
     while board.get(guard.x, guard.y) != "-":
         if board.get(guard.x, guard.y) != "X":
             count += 1
         board.set(guard.x, guard.y, "X")
+        if guard.direction in board.visited[guard.y][guard.x]:
+            cycle = True
+            break
+        board.mark_visited(guard.x, guard.y, guard.direction)
         guard.move(board)
-    return count
+    return count, cycle
 
-assert count_positions_visited(test_board) == 41
+
+test_count, test_cycle = count_positions_visited(test_board)
+assert test_count == 41, False
 
 real_lines = get_input_lines("input.txt")
 real_board = Board(real_lines)
-real_answer = count_positions_visited(real_board)
+real_answer, real_cycle = count_positions_visited(real_board)
 assert real_answer == 4559
+assert real_cycle == False
 print(f"ANSWER = {real_answer}")
