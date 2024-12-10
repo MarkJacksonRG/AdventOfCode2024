@@ -105,8 +105,39 @@ cycle_board.set(3, 6, "#")
 cycle_cycle = is_board_cycle(cycle_board)
 assert cycle_cycle == True
 
+def count_obstacle_positions_that_cause_cycle(board: Board):
+    reference_board = copy.deepcopy(board)
+    initial_cycle = is_board_cycle(reference_board)
+    assert initial_cycle == False
+
+    count = 0
+    for ox in reference_board.get_x_range():
+        for oy in reference_board.get_y_range():
+            print(f"{ox=}, {oy=}, {count=}")
+            if not reference_board.visited[oy][ox]:
+                continue
+            if reference_board.get(ox, oy) == "^":
+                continue
+            candidate_board = copy.deepcopy(board)
+            candidate_board.set(ox, oy, "#")
+            if is_board_cycle(candidate_board):
+                count += 1
+
+    return count
+
+# Get an unpolluted copy of test board
+test_board = Board(test_lines)
+test_count = count_obstacle_positions_that_cause_cycle(test_board)
+assert test_count == 6
+
 real_lines = get_input_lines("input.txt")
 real_board = Board(real_lines)
 real_cycle = is_board_cycle(real_board)
 assert real_cycle == False
-# print(f"ANSWER = {real_answer}")
+
+# Get an unpolluted copy of real board
+real_board = Board(get_input_lines("input.txt"))
+real_answer = count_obstacle_positions_that_cause_cycle(real_board)
+print(f"ANSWER = {real_answer}")
+
+# Apparently 1471 is too low
