@@ -76,3 +76,16 @@ assert evaluate_candidate([10, "+", 19]) == 29
 assert evaluate_candidate([10, "*", 19]) == 190
 assert evaluate_candidate([81, "+", 40, "+", 27]) == 148
 assert evaluate_candidate([81, "+", 40, "*", 27]) == 3267
+
+def get_sum_of_results_for_valid_equations(equations: list[Equation]) -> int:
+    total = 0
+    for equation in equations:
+        print(equation)
+        for candidate in get_candidates(equation):
+            if evaluate_candidate(candidate) == equation.result:
+                print("VALID")
+                total += equation.result
+                break
+    return total
+
+assert get_sum_of_results_for_valid_equations(test_equations) == 3749
