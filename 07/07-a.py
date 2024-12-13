@@ -74,3 +74,5 @@ def evaluate_candidate(candidate: list[int | str]) -> int:
 
 assert evaluate_candidate([10, "+", 19]) == 29
 assert evaluate_candidate([10, "*", 19]) == 190
+assert evaluate_candidate([81, "+", 40, "+", 27]) == 148
+assert evaluate_candidate([81, "+", 40, "*", 27]) == 3267
