@@ -49,7 +49,14 @@ def get_candidates(equation: Equation) -> list[list[int | str]]:
     build_candidates()
     return candidates
 
-test_candidates = get_candidates(test_equations[0])
-assert len(test_candidates) == 2
-assert test_candidates[0] == [10, "+", 19]
-assert test_candidates[1] == [10, "*", 19]
+test_candidates1 = get_candidates(test_equations[0])
+assert len(test_candidates1) == 2
+assert test_candidates1[0] == [10, "+", 19]
+assert test_candidates1[1] == [10, "*", 19]
+
+test_candidates2 = get_candidates(test_equations[1])
+assert len(test_candidates2) == 4
+assert test_candidates2[0] == [81, "+", 40, "+", 27]
+assert test_candidates2[1] == [81, "+", 40, "*", 27]
+assert test_candidates2[2] == [81, "*", 40, "+", 27]
+assert test_candidates2[3] == [81, "*", 40, "*", 27]
