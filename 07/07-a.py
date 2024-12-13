@@ -77,15 +77,25 @@ assert evaluate_candidate([10, "*", 19]) == 190
 assert evaluate_candidate([81, "+", 40, "+", 27]) == 148
 assert evaluate_candidate([81, "+", 40, "*", 27]) == 3267
 
-def get_sum_of_results_for_valid_equations(equations: list[Equation]) -> int:
+def get_sum_of_results_for_valid_equations(equations: list[Equation], chatty: bool) -> int:
     total = 0
-    for equation in equations:
-        print(equation)
+    for i, equation in enumerate(equations):
+        if chatty:
+            print(i, equation)
         for candidate in get_candidates(equation):
             if evaluate_candidate(candidate) == equation.result:
-                print("VALID")
+                if chatty:
+                    print(i, "VALID")
                 total += equation.result
                 break
     return total
 
-assert get_sum_of_results_for_valid_equations(test_equations) == 3749
+
+test_sum_results = get_sum_of_results_for_valid_equations(test_equations, False)
+assert test_sum_results == 3749
+
+real_lines = get_input_lines("input.txt")
+real_equations = parse_lines(real_lines)
+real_sum_results = get_sum_of_results_for_valid_equations(real_equations, True)
+assert real_sum_results == 12940396350192
+print(real_sum_results)
