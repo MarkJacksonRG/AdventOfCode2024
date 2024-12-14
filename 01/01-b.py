@@ -11,7 +11,6 @@ def get_input_lines(filename):
 
 
 def get_split_input_lines(filename):
-    global split_lines, line
     lines = get_input_lines(filename)
     split_lines = []
     for line in lines:
@@ -33,8 +32,8 @@ def split_lines_to_two_lists(split_lines):
         list2.append(line[1])
     return list1, list2
 
-split_lines = get_split_input_lines("input.txt")
-list1, list2 = split_lines_to_two_lists(split_lines)
+real_split_lines = get_split_input_lines("input.txt")
+real_list1, real_list2 = split_lines_to_two_lists(real_split_lines)
 
 def get_num_occurrences(some_list):
     num_occurrences = {}
@@ -45,9 +44,10 @@ def get_num_occurrences(some_list):
             num_occurrences[item] = 1
     return num_occurrences
 
-num_occurrences2 = (get_num_occurrences(list2))
+num_occurrences2 = (get_num_occurrences(real_list2))
 
 similarity_score = 0
-for next in list1:
-    similarity_score += int(next) * num_occurrences2.get(next, 0)
+for next1 in real_list1:
+    similarity_score += int(next1) * num_occurrences2.get(next1, 0)
+assert similarity_score == 22776016
 print(f"SIMILARITY = {similarity_score}")
