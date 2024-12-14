@@ -62,10 +62,10 @@ assert test_candidates2[2] == [81, "*", 40, "+", 27]
 assert test_candidates2[3] == [81, "*", 40, "*", 27]
 
 def evaluate_candidate(candidate: list[int | str]) -> int:
-    result = candidate[0]
+    result = int(candidate[0])
     for i in range(1, len(candidate), 2):
         operator = candidate[i]
-        value = candidate[i + 1]
+        value = int(candidate[i + 1])
         if operator == "+":
             result += value
         elif operator == "*":
