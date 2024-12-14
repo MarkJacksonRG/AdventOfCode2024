@@ -1,7 +1,6 @@
 import copy
 from typing import List
 
-
 def get_input_as_single_line(filename: str) -> str:
     with open(filename, "r") as file:
         return file.read()
@@ -29,19 +28,13 @@ def get_disk_layout(line: str) -> List[int]:
 toy_layout = get_disk_layout("12345")
 assert len(toy_layout) == 1 + 2 + 3 + 4 + 5
 assert toy_layout[0] == 0
-assert toy_layout[1] == -1
-assert toy_layout[2] == -1
-assert toy_layout[3] == 1
-assert toy_layout[4] == 1
-assert toy_layout[5] == 1
-assert toy_layout[6] == -1
-assert toy_layout[7] == -1
-assert toy_layout[8] == -1
-assert toy_layout[9] == -1
+assert toy_layout[1:3] == [-1] * 2
+assert toy_layout[3:6] == [1] * 3
+assert toy_layout[6:10] == [-1] * 4
+assert toy_layout[10:15] == [2] * 5
 
 def layout_from_string_of_blocks(string_of_blocks: str) -> List[int]:
-    return [
-        -1 if x == "." else int(x) for x in string_of_blocks]
+    return [-1 if x == "." else int(x) for x in string_of_blocks]
 
 test_layout = get_disk_layout(test_line)
 expected_test_layout = layout_from_string_of_blocks("00...111...2...333.44.5555.6666.777.888899")
