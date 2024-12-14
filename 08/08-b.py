@@ -1,18 +1,17 @@
 from collections import defaultdict
-
 import numpy as np
+from typing import List, Dict, Tuple, Set
 
-
-def get_input_lines(filename: str) -> list[str]:
+def get_input_lines(filename: str) -> List[str]:
     with open(filename, "r") as file:
         lines = file.read()
     return lines.split("\n")
 
-test_lines = get_input_lines("test.txt")
+test_lines = get_input_lines('test.txt')
 assert len(test_lines) == 12
 
 class Board:
-    def __init__(self, lines: list[str]):
+    def __init__(self, lines: List[str]):
         self.lines = [list(l) for l in lines]
         assert all(len(row) == len(self.lines[0]) for row in self.lines)
 
@@ -38,7 +37,7 @@ assert test_board.get(4, -1) == "-"
 def make_point_nparray(x: int, y: int) -> np.ndarray:
     return np.array([x, y])
 
-def get_frequencies(board: Board) -> dict[str, list[np.ndarray]]:
+def get_frequencies(board: Board) -> Dict[str, List[np.ndarray]]:
     frequencies = defaultdict(list)
     for y in board.get_y_range():
         for x in board.get_x_range():
@@ -54,7 +53,7 @@ assert len(test_frequencies["A"]) == 3
 assert (test_frequencies["0"][0] == np.array((8, 1))).all()
 assert (test_frequencies["0"][3] == np.array((4, 4))).all()
 
-def get_pairs(board: Board, frequency: str) -> list[tuple[np.ndarray, np.ndarray]]:
+def get_pairs(board: Board, frequency: str) -> List[Tuple[np.ndarray, np.ndarray]]:
     pairs = []
     points = get_frequencies(board).get(frequency)
     for i in range(len(points)):
@@ -66,10 +65,8 @@ test_pairs1 = get_pairs(test_board, "0")
 assert len(test_pairs1) == 6
 assert (make_point_nparray(8, 1) == test_pairs1[2][0]).all()
 assert (make_point_nparray(4, 4) == test_pairs1[2][1]).all()
-# assert (Point(8, 1), Point(5, 2)) == test_pairs1[0]
-# assert (Point(5, 2), Point(4, 4)) == test_pairs1[5]
 
-def get_antinodes_for_pair(board: Board, pair: tuple[np.ndarray, np.ndarray]) -> set[tuple[int, int]]:
+def get_antinodes_for_pair(board: Board, pair: Tuple[np.ndarray, np.ndarray]) -> Set[Tuple[int, int]]:
     p1, p2 = pair
     antinodes = set()
     for start, delta in (p2, p2 - p1), (p1, p1 - p2):
@@ -91,7 +88,7 @@ assert (0, 5) in test_antinodes1
 assert (8, 1) in test_antinodes1
 assert (6, 2) in test_antinodes1
 
-def get_all_antinodes(board: Board, frequencies: dict[str, list[np.ndarray]]) -> set[tuple[int, int]]:
+def get_all_antinodes(board: Board, frequencies: Dict[str, List[np.ndarray]]) -> Set[Tuple[int, int]]:
     antinodes = set()
     for frequency in frequencies:
         for pair in get_pairs(board, frequency):
@@ -101,7 +98,7 @@ def get_all_antinodes(board: Board, frequencies: dict[str, list[np.ndarray]]) ->
 test_antinodes = get_all_antinodes(test_board, test_frequencies)
 assert len(test_antinodes) == 34
 
-real_lines = get_input_lines("input.txt")
+real_lines = get_input_lines('input.txt')
 real_board = Board(real_lines)
 real_frequencies = get_frequencies(real_board)
 real_antinodes = get_all_antinodes(real_board, real_frequencies)
