@@ -46,6 +46,7 @@ def get_frequencies(board: Board) -> dict[str, list[np.ndarray]]:
             if val != ".":
                 frequencies[val].append(np.array([x, y]))
     return frequencies
+
 test_frequencies = get_frequencies(test_board)
 assert len(test_frequencies) == 2
 assert len(test_frequencies["0"]) == 4
@@ -93,8 +94,7 @@ assert (6, 2) in test_antinodes1
 def get_all_antinodes(board: Board, frequencies: dict[str, list[np.ndarray]]) -> set[tuple[int, int]]:
     antinodes = set()
     for frequency in frequencies:
-        pairs = get_pairs(board, frequency)
-        for pair in pairs:
+        for pair in get_pairs(board, frequency):
             antinodes |= get_antinodes_for_pair(board, pair)
     return antinodes
 
