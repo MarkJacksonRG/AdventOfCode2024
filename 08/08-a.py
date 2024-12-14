@@ -77,11 +77,12 @@ def get_antinodes_for_pair(board: Board, pair: tuple[Point, Point]) -> set[Point
     dx = p2.x - p1.x
     dy = p2.y - p1.y
     antinodes = set()
-    for candidate in (Point(p1.x - dx, p1.y - dy), Point(p1.x + dx, p2.y + dy)):
+    for candidate in (Point(p1.x - dx, p1.y - dy), Point(p2.x + dx, p2.y + dy)):
         if board.get(candidate.x, candidate.y) != "-":
             antinodes.add(candidate)
     return antinodes
 
 test_antinodes1 = get_antinodes_for_pair(test_board, (Point(8, 1), Point(6, 2)))
-assert len(test_antinodes1) == 1
+assert len(test_antinodes1) == 2
 assert Point(4, 3) in test_antinodes1
+assert Point(10, 0) in test_antinodes1
