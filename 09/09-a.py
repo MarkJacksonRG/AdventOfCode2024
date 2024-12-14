@@ -42,3 +42,4 @@ test_layout = get_disk_layout(test_line)
 expected_test_layout = [
     -1 if x=="." else int(x) for x in "00...111...2...333.44.5555.6666.777.888899"]
 assert len(test_layout) == len(expected_test_layout)
+assert test_layout == expected_test_layout
