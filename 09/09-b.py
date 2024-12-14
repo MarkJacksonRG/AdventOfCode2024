@@ -73,6 +73,7 @@ def get_compact_layout(layout: List[int]) -> List[int]:
             end += 1
         attempt_move(compacted_layout, start, end, current_id)
         current_id -= 1
+        print("Current ID:", current_id)
     return compacted_layout
 
 test_compact_layout = get_compact_layout(test_layout)
