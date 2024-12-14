@@ -57,3 +57,16 @@ assert len(test_frequencies["0"]) == 4
 assert len(test_frequencies["A"]) == 3
 assert test_frequencies["0"][0] == Point(8, 1)
 assert test_frequencies["0"][3] == Point(4, 4)
+
+def get_pairs(board: Board, frequency: str):
+    pairs = []
+    points = get_frequencies(board).get(frequency)
+    for i in range(len(points)):
+        for j in range(i + 1, len(points)):
+            pairs.append((points[i], points[j]))
+    return pairs
+test_pairs1 = get_pairs(test_board, "0")
+assert len(test_pairs1) == 6
+assert (Point(8, 1), Point(4, 4)) in test_pairs1
+assert (Point(8, 1), Point(5, 2)) in test_pairs1
+assert (Point(4, 4), Point(5, 2)) in test_pairs1
