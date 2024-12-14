@@ -76,4 +76,5 @@ assert get_checksum(test_compact_layout) == 1928
 real_layout = get_disk_layout(real_line)
 real_compact_layout = get_compact_layout(real_layout)
 real_checksum = get_checksum(real_compact_layout)
+assert real_checksum == 6471961544878
 print(f"ANSWER: {real_checksum}")
