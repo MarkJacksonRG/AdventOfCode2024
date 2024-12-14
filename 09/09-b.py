@@ -1,5 +1,5 @@
 import copy
-from typing import List
+from typing import List, Optional
 
 def get_input_as_single_line(filename: str) -> str:
     with open(filename, "r") as file:
@@ -41,12 +41,11 @@ expected_test_layout = layout_from_string_of_blocks("00...111...2...333.44.5555.
 assert len(test_layout) == len(expected_test_layout)
 assert test_layout == expected_test_layout
 
-
-def attempt_move(compacted_layout, current_start, current_end, block_id):
+def attempt_move(compacted_layout: List[int], current_start: int, current_end: int, block_id: int) -> None:
     block_len = current_end - current_start + 1
     i = 0
-    candidate_start = None
-    while i < current_start+1: # if theres free space immediately before the block, it can move
+    candidate_start: Optional[int] = None
+    while i < current_start + 1:  # if there's free space immediately before the block, it can move
         if compacted_layout[i] == -1:
             if candidate_start is None:
                 candidate_start = i
@@ -61,7 +60,6 @@ def attempt_move(compacted_layout, current_start, current_end, block_id):
                 candidate_start = None
         i += 1
 
-
 def get_compact_layout(layout: List[int]) -> List[int]:
     compacted_layout = copy.deepcopy(layout)
     current_id = max(layout)
@@ -69,7 +67,7 @@ def get_compact_layout(layout: List[int]) -> List[int]:
         start = next((i for i, x in enumerate(compacted_layout) if x == current_id), None)
         assert start is not None
         end = start
-        while end+1 < len(compacted_layout) and compacted_layout[end+1] == current_id:
+        while end + 1 < len(compacted_layout) and compacted_layout[end + 1] == current_id:
             end += 1
         attempt_move(compacted_layout, start, end, current_id)
         current_id -= 1
