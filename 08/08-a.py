@@ -34,3 +34,26 @@ assert test_board.get(-1, 6) == "-"
 assert test_board.get(6, 5) == "A"
 assert test_board.get(4, -1) == "-"
 
+@dataclass
+class Point:
+    x: int
+    y: int
+
+def get_frequencies(board: Board):
+    frequencies = {}
+    for y in board.get_y_range():
+        for x in board.get_x_range():
+            val = board.get(x, y)
+            if val != ".":
+                if val not in frequencies:
+                    frequencies[val] = []
+                points = frequencies.get(val)
+                points.append(Point(x, y))
+    return frequencies
+
+test_frequencies = get_frequencies(test_board)
+assert len(test_frequencies) == 2
+assert len(test_frequencies["0"]) == 4
+assert len(test_frequencies["A"]) == 3
+assert test_frequencies["0"][0] == Point(8, 1)
+assert test_frequencies["0"][3] == Point(4, 4)
