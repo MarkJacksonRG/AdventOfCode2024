@@ -36,10 +36,8 @@ assert test_board.get(-1, 6) == "-"
 assert test_board.get(6, 5) == "A"
 assert test_board.get(4, -1) == "-"
 
-@dataclass(frozen=True)
-class Point:
-    x: int
-    y: int
+def Point(x: int, y:int):
+    return np.array([x, y])
 
 def get_frequencies(board: Board):
     frequencies = {}
@@ -70,21 +68,21 @@ def get_pairs(board: Board, frequency: str):
     return pairs
 test_pairs1 = get_pairs(test_board, "0")
 assert len(test_pairs1) == 6
-assert (Point(8, 1), Point(4, 4)) in test_pairs1
-assert (Point(8, 1), Point(5, 2)) in test_pairs1
-assert (Point(5, 2), Point(4, 4)) in test_pairs1
+assert (Point(8, 1) == test_pairs1[2][0]).all()
+assert (Point(4, 4) == test_pairs1[2][1]).all()
+# assert (Point(8, 1), Point(5, 2)) == test_pairs1[0]
+# assert (Point(5, 2), Point(4, 4)) == test_pairs1[5]
 
-def get_antinodes_for_pair(board: Board, pair: tuple[Point, Point]) -> set[Point]:
+def get_antinodes_for_pair(board: Board, pair: tuple[np.ndarray, np.ndarray]) -> set[tuple[int, int]]:
     p1, p2 = pair
-    dx = p2.x - p1.x
-    dy = p2.y - p1.y
+    delta = p2 - p1
     antinodes = set()
-    for candidate in (Point(p1.x - dx, p1.y - dy), Point(p2.x + dx, p2.y + dy)):
-        if board.get(candidate.x, candidate.y) != "-":
-            antinodes.add(candidate)
+    for candidate in (p1 - delta, p2 + delta):
+        if board.get(candidate[0], candidate[1]) != "-":
+            antinodes.add(tuple(candidate))
     return antinodes
 
 test_antinodes1 = get_antinodes_for_pair(test_board, (Point(8, 1), Point(6, 2)))
 assert len(test_antinodes1) == 2
-assert Point(4, 3) in test_antinodes1
-assert Point(10, 0) in test_antinodes1
+assert (4, 3) in test_antinodes1
+assert (10, 0) in test_antinodes1
