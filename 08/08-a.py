@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Dict, Any, List
 
 import numpy as np
 
@@ -40,7 +41,7 @@ def make_point_nparray(x: int, y:int):
     return np.array([x, y])
 
 def get_frequencies(board: Board):
-    frequencies = {}
+    frequencies: Dict[Any, List[np.ndarray]] = {}
     for y in board.get_y_range():
         for x in board.get_x_range():
             val = board.get(x, y)
