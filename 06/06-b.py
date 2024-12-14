@@ -13,9 +13,9 @@ assert len(test_lines) == 10
 class Board:
     def __init__(self, lines):
         self.lines = [list(l) for l in lines]
-        self.visited: list[list[tuple[int, int]]] = []
+        self.visited: list[list[list[tuple[int, int]]]] = []
         for l in lines:
-            next_list: list[tuple[int, int]] = []
+            next_list: list[list[tuple[int, int]]] = []
             self.visited.append(next_list)
             for c in l:
                 next_list.append(list())
