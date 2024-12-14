@@ -77,7 +77,7 @@ def get_antinodes_for_pair(board: Board, pair: tuple[np.ndarray, np.ndarray]) ->
     p1, p2 = pair
     antinodes = set()
     for start, delta in (p2, p2 - p1), (p1, p1 - p2):
-        i = 1
+        i = 0
         while True:
             candidate = start + i * delta
             if board.get(candidate[0], candidate[1]) == "-":
@@ -87,11 +87,13 @@ def get_antinodes_for_pair(board: Board, pair: tuple[np.ndarray, np.ndarray]) ->
     return antinodes
 
 test_antinodes1 = get_antinodes_for_pair(test_board, (make_point_nparray(8, 1), make_point_nparray(6, 2)))
-assert len(test_antinodes1) == 4
+assert len(test_antinodes1) == 6
 assert (4, 3) in test_antinodes1
 assert (10, 0) in test_antinodes1
 assert (2, 4) in test_antinodes1
 assert (0, 5) in test_antinodes1
+assert (8, 1) in test_antinodes1
+assert (6, 2) in test_antinodes1
 
 def get_all_antinodes(board: Board, frequencies: dict[str, list[np.ndarray]]) -> set[tuple[int, int]]:
     antinodes = set()
@@ -102,11 +104,11 @@ def get_all_antinodes(board: Board, frequencies: dict[str, list[np.ndarray]]) ->
     return antinodes
 
 test_antinodes = get_all_antinodes(test_board, test_frequencies)
-assert len(test_antinodes) == 14
+assert len(test_antinodes) == 34
 
 real_lines = get_input_lines("input.txt")
 real_board = Board(real_lines)
 real_frequencies = get_frequencies(real_board)
 real_antinodes = get_all_antinodes(real_board, real_frequencies)
-assert len(real_antinodes) == 259
+assert len(real_antinodes) == 927
 print(f"ANSWER: {len(real_antinodes)}")
