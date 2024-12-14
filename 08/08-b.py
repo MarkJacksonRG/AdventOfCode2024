@@ -1,5 +1,7 @@
-from dataclasses import dataclass
+from collections import defaultdict
+
 import numpy as np
+
 
 def get_input_lines(filename: str) -> list[str]:
     with open(filename, "r") as file:
@@ -37,18 +39,13 @@ def make_point_nparray(x: int, y: int) -> np.ndarray:
     return np.array([x, y])
 
 def get_frequencies(board: Board) -> dict[str, list[np.ndarray]]:
-    frequencies = {}
+    frequencies = defaultdict(list)
     for y in board.get_y_range():
         for x in board.get_x_range():
             val = board.get(x, y)
             if val != ".":
-                # TODO use defaultdict or setdefault
-                if val not in frequencies:
-                    frequencies[val] = []
-                points = frequencies.get(val)
-                points.append(np.array([x, y]))
+                frequencies[val].append(np.array([x, y]))
     return frequencies
-
 test_frequencies = get_frequencies(test_board)
 assert len(test_frequencies) == 2
 assert len(test_frequencies["0"]) == 4
