@@ -1,3 +1,4 @@
+import copy
 from typing import List
 
 
@@ -38,8 +39,29 @@ assert toy_layout[7] == -1
 assert toy_layout[8] == -1
 assert toy_layout[9] == -1
 
+def layout_from_string_of_blocks(string_of_blocks: str) -> List[int]:
+    return [
+        -1 if x == "." else int(x) for x in string_of_blocks]
+
 test_layout = get_disk_layout(test_line)
-expected_test_layout = [
-    -1 if x=="." else int(x) for x in "00...111...2...333.44.5555.6666.777.888899"]
+expected_test_layout = layout_from_string_of_blocks("00...111...2...333.44.5555.6666.777.888899")
 assert len(test_layout) == len(expected_test_layout)
 assert test_layout == expected_test_layout
+
+def get_compact_layout(layout: List[int]) -> List[int]:
+    compacted_layout = copy.deepcopy(layout)
+    a, b = 0, len(layout) - 1
+    while True:
+        while a < len(compacted_layout) and compacted_layout[a] != -1:
+            a += 1
+        while b >= 0 and compacted_layout[b] == -1:
+            b -= 1
+        if a >= b:
+            break
+        compacted_layout[a], compacted_layout[b] = compacted_layout[b], compacted_layout[a]
+    return compacted_layout
+
+test_compact_layout = get_compact_layout(test_layout)
+expected_test_compact_layout = layout_from_string_of_blocks("0099811188827773336446555566..............")
+assert len(test_compact_layout) == len(test_layout)
+assert test_compact_layout == expected_test_compact_layout
