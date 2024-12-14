@@ -49,25 +49,26 @@ def is_line_safe(line):
 
 
 # Tests
-split_lines = get_split_input_lines("test.txt")
-assert len(split_lines) == 6
-for line in split_lines:
+test_split_lines = get_split_input_lines("test.txt")
+assert len(test_split_lines) == 6
+for line in test_split_lines:
     assert len(line)==5
     print(line)
 
-assert is_line_safe(split_lines[0]) == True
-assert is_line_safe(split_lines[1]) == False
-assert is_line_safe(split_lines[2]) == False
-assert is_line_safe(split_lines[3]) == True
-assert is_line_safe(split_lines[4]) == True
-assert is_line_safe(split_lines[5]) == True
+assert is_line_safe(test_split_lines[0]) == True
+assert is_line_safe(test_split_lines[1]) == False
+assert is_line_safe(test_split_lines[2]) == False
+assert is_line_safe(test_split_lines[3]) == True
+assert is_line_safe(test_split_lines[4]) == True
+assert is_line_safe(test_split_lines[5]) == True
 
 # Actual
-split_lines = get_split_input_lines("input.txt")
+real_split_lines = get_split_input_lines("input.txt")
 number = 0
-for line in split_lines:
+for line in real_split_lines:
     if is_line_safe(line):
         number+=1
+assert number == 692
 print(f"NUMBER OF SAFE REPORTS = {number}")
 
 #691 is too low
