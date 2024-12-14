@@ -75,17 +75,23 @@ assert (make_point_nparray(4, 4) == test_pairs1[2][1]).all()
 
 def get_antinodes_for_pair(board: Board, pair: tuple[np.ndarray, np.ndarray]) -> set[tuple[int, int]]:
     p1, p2 = pair
-    delta = p2 - p1
     antinodes = set()
-    for candidate in (p1 - delta, p2 + delta):
-        if board.get(candidate[0], candidate[1]) != "-":
+    for start, delta in (p2, p2 - p1), (p1, p1 - p2):
+        i = 1
+        while True:
+            candidate = start + i * delta
+            if board.get(candidate[0], candidate[1]) == "-":
+                break
             antinodes.add(tuple(candidate))
+            i += 1
     return antinodes
 
 test_antinodes1 = get_antinodes_for_pair(test_board, (make_point_nparray(8, 1), make_point_nparray(6, 2)))
-assert len(test_antinodes1) == 2
+assert len(test_antinodes1) == 4
 assert (4, 3) in test_antinodes1
 assert (10, 0) in test_antinodes1
+assert (2, 4) in test_antinodes1
+assert (0, 5) in test_antinodes1
 
 def get_all_antinodes(board: Board, frequencies: dict[str, list[np.ndarray]]) -> set[tuple[int, int]]:
     antinodes = set()
