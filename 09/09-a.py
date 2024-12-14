@@ -25,15 +25,20 @@ def get_disk_layout(line: str) -> List[int]:
         next_id += 1
     return layout
 
-test_layout = get_disk_layout("12345")
-assert len(test_layout) == 1+2+3+4+5
-assert test_layout[0] == 0
-assert test_layout[1] == -1
-assert test_layout[2] == -1
-assert test_layout[3] == 1
-assert test_layout[4] == 1
-assert test_layout[5] == 1
-assert test_layout[6] == -1
-assert test_layout[7] == -1
-assert test_layout[8] == -1
-assert test_layout[9] == -1
+toy_layout = get_disk_layout("12345")
+assert len(toy_layout) == 1 + 2 + 3 + 4 + 5
+assert toy_layout[0] == 0
+assert toy_layout[1] == -1
+assert toy_layout[2] == -1
+assert toy_layout[3] == 1
+assert toy_layout[4] == 1
+assert toy_layout[5] == 1
+assert toy_layout[6] == -1
+assert toy_layout[7] == -1
+assert toy_layout[8] == -1
+assert toy_layout[9] == -1
+
+test_layout = get_disk_layout(test_line)
+expected_test_layout = [
+    -1 if x=="." else int(x) for x in "00...111...2...333.44.5555.6666.777.888899"]
+assert len(test_layout) == len(expected_test_layout)
