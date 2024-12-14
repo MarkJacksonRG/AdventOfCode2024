@@ -65,3 +65,15 @@ test_compact_layout = get_compact_layout(test_layout)
 expected_test_compact_layout = layout_from_string_of_blocks("0099811188827773336446555566..............")
 assert len(test_compact_layout) == len(test_layout)
 assert test_compact_layout == expected_test_compact_layout
+
+def get_checksum(layout: List[int]) -> int:
+    return sum(
+        i * max(0, layout[i]) for i in range(len(layout))
+    )
+
+assert get_checksum(test_compact_layout) == 1928
+
+real_layout = get_disk_layout(real_line)
+real_compact_layout = get_compact_layout(real_layout)
+real_checksum = get_checksum(real_compact_layout)
+print(f"ANSWER: {real_checksum}")
