@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+import numpy as np
+
 
 def get_input_lines(filename):
     with open(filename, "r") as file:
@@ -49,15 +51,15 @@ def get_frequencies(board: Board):
                 if val not in frequencies:
                     frequencies[val] = []
                 points = frequencies.get(val)
-                points.append(Point(x, y))
+                points.append(np.array([x, y]))
     return frequencies
 
 test_frequencies = get_frequencies(test_board)
 assert len(test_frequencies) == 2
 assert len(test_frequencies["0"]) == 4
 assert len(test_frequencies["A"]) == 3
-assert test_frequencies["0"][0] == Point(8, 1)
-assert test_frequencies["0"][3] == Point(4, 4)
+assert (test_frequencies["0"][0] == np.array((8, 1))).all()
+assert (test_frequencies["0"][3] == np.array((4, 4))).all()
 
 def get_pairs(board: Board, frequency: str):
     pairs = []
