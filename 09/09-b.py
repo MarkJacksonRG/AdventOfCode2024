@@ -41,6 +41,27 @@ expected_test_layout = layout_from_string_of_blocks("00...111...2...333.44.5555.
 assert len(test_layout) == len(expected_test_layout)
 assert test_layout == expected_test_layout
 
+
+def attempt_move(compacted_layout, current_start, current_end, block_id):
+    block_len = current_end - current_start + 1
+    i = 0
+    candidate_start = None
+    while i < current_start:
+        if compacted_layout[i] == -1:
+            if candidate_start is None:
+                candidate_start = i
+        else:
+            if candidate_start is not None:
+                if i - candidate_start >= block_len:
+                    # We can move the block
+                    for j in range(block_len):
+                        compacted_layout[candidate_start + j] = block_id
+                        compacted_layout[current_start + j] = -1
+                    return
+                candidate_start = None
+        i += 1
+
+
 def get_compact_layout(layout: List[int]) -> List[int]:
     compacted_layout = copy.deepcopy(layout)
     i = len(layout) - 1
@@ -50,7 +71,7 @@ def get_compact_layout(layout: List[int]) -> List[int]:
         if (compacted_layout[i] == -1) or (current_id is not None and compacted_layout[i] != current_id):
             if current_end != -1:
                 # We have a block to move
-                pass
+                attempt_move(compacted_layout, i+1, current_end, current_id)
             if compacted_layout[i] == -1:
                 current_end = -1
                 current_id = None
