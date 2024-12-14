@@ -43,7 +43,7 @@ mul2 = get_mul(test_2)
 assert sum_of_products(mul2) == 48
 
 
-real_lines = get_input_lines("03\input.txt")
+real_lines = get_input_lines("input.txt")
 print (real_lines)
 real_mul = get_mul(real_lines)
 print(len(real_mul))
