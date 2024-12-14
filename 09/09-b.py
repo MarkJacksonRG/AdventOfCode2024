@@ -64,25 +64,15 @@ def attempt_move(compacted_layout, current_start, current_end, block_id):
 
 def get_compact_layout(layout: List[int]) -> List[int]:
     compacted_layout = copy.deepcopy(layout)
-    i = len(layout) - 1
-    current_end = -1
-    current_id = None
-    while i >= 0:
-        if (compacted_layout[i] == -1) or (current_id is not None and compacted_layout[i] != current_id):
-            if current_end != -1:
-                # We have a block to move
-                attempt_move(compacted_layout, i+1, current_end, current_id)
-            if compacted_layout[i] == -1:
-                current_end = -1
-                current_id = None
-            else:
-                current_end = i
-                current_id = compacted_layout[i]
-        else:
-            if current_end == -1:
-                current_end = i
-                current_id = compacted_layout[i]
-        i -= 1
+    current_id = max(layout)
+    while current_id >= 0:
+        start = next((i for i, x in enumerate(compacted_layout) if x == current_id), None)
+        assert start is not None
+        end = start
+        while end+1 < len(compacted_layout) and compacted_layout[end+1] == current_id:
+            end += 1
+        attempt_move(compacted_layout, start, end, current_id)
+        current_id -= 1
     return compacted_layout
 
 test_compact_layout = get_compact_layout(test_layout)
