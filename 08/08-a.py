@@ -97,3 +97,10 @@ def get_all_antinodes(board: Board, frequencies: dict[str, list[np.ndarray]]) ->
 
 test_antinodes = get_all_antinodes(test_board, test_frequencies)
 assert len(test_antinodes) == 14
+
+real_lines = get_input_lines("input.txt")
+real_board = Board(real_lines)
+real_frequencies = get_frequencies(real_board)
+real_antinodes = get_all_antinodes(real_board, real_frequencies)
+assert len(real_antinodes) == 259
+print(f"ANSWER: {len(real_antinodes)}")
