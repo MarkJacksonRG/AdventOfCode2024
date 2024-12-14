@@ -34,7 +34,7 @@ assert test_board.get(-1, 6) == "-"
 assert test_board.get(6, 5) == "A"
 assert test_board.get(4, -1) == "-"
 
-@dataclass
+@dataclass(frozen=True)
 class Point:
     x: int
     y: int
@@ -45,6 +45,7 @@ def get_frequencies(board: Board):
         for x in board.get_x_range():
             val = board.get(x, y)
             if val != ".":
+                # TODO use defaultdict or setdefault
                 if val not in frequencies:
                     frequencies[val] = []
                 points = frequencies.get(val)
@@ -69,4 +70,18 @@ test_pairs1 = get_pairs(test_board, "0")
 assert len(test_pairs1) == 6
 assert (Point(8, 1), Point(4, 4)) in test_pairs1
 assert (Point(8, 1), Point(5, 2)) in test_pairs1
-assert (Point(4, 4), Point(5, 2)) in test_pairs1
+assert (Point(5, 2), Point(4, 4)) in test_pairs1
+
+def get_antinodes_for_pair(board: Board, pair: tuple[Point, Point]) -> set[Point]:
+    p1, p2 = pair
+    dx = p2.x - p1.x
+    dy = p2.y - p1.y
+    antinodes = set()
+    for candidate in (Point(p1.x - dx, p1.y - dy), Point(p1.x + dx, p2.y + dy)):
+        if board.get(candidate.x, candidate.y) != "-":
+            antinodes.add(candidate)
+    return antinodes
+
+test_antinodes1 = get_antinodes_for_pair(test_board, (Point(8, 1), Point(6, 2)))
+assert len(test_antinodes1) == 1
+assert Point(4, 3) in test_antinodes1
