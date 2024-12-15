@@ -106,3 +106,7 @@ def get_sum_trailhead_scores(board: IntBoard):
 test_scores = get_scores(test_board)
 test_sum_trailhead_scores = get_sum_trailhead_scores(test_board)
 assert test_sum_trailhead_scores == 36
+
+real_board = IntBoard(get_input_lines("input.txt"))
+real_sum_trailhead_scores = get_sum_trailhead_scores(real_board)
+print(f"ANSWER: {real_sum_trailhead_scores}")
