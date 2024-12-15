@@ -70,22 +70,24 @@ def get_scores(board: IntBoard):
     # Set all the trail ends to score 9
     for x in board.get_x_range():
         for y in board.get_y_range():
-            if board.get(x, y) == "9":
+            if board.get(x, y) == 9:
                 scores.set(x, y, 9)
 
     # Work backwards from trail end-1 to trail head
     # and set the score to the maximum of the scores of the adjacent cells
-    for step_start in range(9, -1, -1):
+    for step_start in range(9-1, -1, -1):
         step_end = step_start + 1
         for x in board.get_x_range():
             for y in board.get_y_range():
-                if board.get(x, y) == str(step_start):
-                    scores.set(x, y,  max(
-                        int(int(board.get(x+1,y))==step_end) * scores.get(x+1, y),
-                        int(int(board.get(x-1,y))==step_end) * scores.get(x-1, y),
-                        int(int(board.get(x,y+1))==step_end) * scores.get(x, y+1),
-                        int(int(board.get(x,y+1))==step_end) * scores.get(x, y-1)
-                    ))
+                if board.get(x, y) == step_start:
+                    step_score = max(
+                        int(board.get(x + 1, y) == step_end) * scores.get(x + 1, y),
+                        int(board.get(x - 1, y) == step_end) * scores.get(x - 1, y),
+                        int(board.get(x, y + 1) == step_end) * scores.get(x, y + 1),
+                        int(board.get(x, y + 1) == step_end) * scores.get(x, y - 1)
+                    )
+                    assert step_score in (0, 9), f"Invalid {step_score=}"
+                    scores.set(x, y, step_score)
     return scores
 
-# get_scores(test_board)
+get_scores(test_board)
