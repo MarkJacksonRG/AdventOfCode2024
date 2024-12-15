@@ -46,12 +46,21 @@ class Scores:
 
     def get(self, x: int, y: int) -> int:
         if 0 <= x < self.scores.shape[1] and 0 <= y < self.scores.shape[0]:
-            return self.get(x, y)
+            return int(self.scores[y][x])
         else:
             return -1
 
     def set(self, x: int, y: int, value: int):
         self.scores[y][x] = value
+
+test_scores = Scores(test_board)
+assert test_scores.get(0,0) == -1
+test_scores.set(0,0,0)
+assert test_scores.get(0,0) == 0
+assert test_scores.get(-1,0) == -1
+assert test_scores.get(0,-1) == -1
+assert test_scores.get(8,0) == -1
+assert test_scores.get(0,8) == -1
 
 def get_scores(board: IntBoard):
     # Create numpy array of integers with the same dimensions as the board
