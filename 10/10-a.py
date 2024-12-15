@@ -52,8 +52,8 @@ class ReachableTrailends:
         else:
             return set()
 
-    def add_trailend(self, x: int, y: int, trailend: Tuple) -> None:
-        self.reachable_trailends[y][x].add(trailend)
+    def merge_trailends(self, x: int, y: int, trailends: Set) -> None:
+        self.reachable_trailends[y][x] |= trailends
 
     def get_x_range(self):
         return self._x_range
@@ -64,51 +64,49 @@ class ReachableTrailends:
 
 test_reachable_trailends = ReachableTrailends(test_board)
 assert test_reachable_trailends.get(0, 0) == set()
-test_reachable_trailends.add_trailend(0, 0, (10, 10))
+test_reachable_trailends.merge_trailends(0, 0, {(10, 10)})
 assert test_reachable_trailends.get(0, 0) == {(10, 10)}
-test_reachable_trailends.add_trailend(0, 0, (20, 20))
+test_reachable_trailends.merge_trailends(0, 0, {(20, 20)})
 assert test_reachable_trailends.get(0, 0) == {(10, 10), (20, 20)}
 assert test_reachable_trailends.get(-1, 0) == set()
 assert test_reachable_trailends.get(0, -1) == set()
 assert test_reachable_trailends.get(8, 0) == set()
 assert test_reachable_trailends.get(0, 8) == set()
 
-def get_scores(board: IntBoard):
-    # Create numpy array of integers with the same dimensions as the board
-    # and initialize it with -1
-    scores = Scores(board)
+def get_reachable_trailends(board: IntBoard) -> ReachableTrailends:
+    reachable_trailends = ReachableTrailends(board)
 
-    # Set all the trail ends to score 9
+    # Set all the trail ends as able to reach themselves
     for x in board.get_x_range():
         for y in board.get_y_range():
             if board.get(x, y) == 9:
-                scores.set(x, y, 9)
+                reachable_trailends.merge_trailends(x, y, {(x, y)})
 
     # Work backwards from trail end-1 to trail head
-    # and set the score to the maximum of the scores of the adjacent cells
+    # and set the reachable trailends as all the reachable trailends of the adjacent cells
     for step_start in range(9-1, -1, -1):
         step_end = step_start + 1
         for x in board.get_x_range():
             for y in board.get_y_range():
                 if board.get(x, y) == step_start:
-                    step_score = max(
-                        int(board.get(x + 1, y) == step_end) * scores.get(x + 1, y),
-                        int(board.get(x - 1, y) == step_end) * scores.get(x - 1, y),
-                        int(board.get(x, y + 1) == step_end) * scores.get(x, y + 1),
-                        int(board.get(x, y + 1) == step_end) * scores.get(x, y - 1)
+                    reachable_from_here = (
+                        reachable_trailends.get(x + 1, y) |
+                        reachable_trailends.get(x - 1, y) |
+                        reachable_trailends.get(x, y + 1) |
+                        reachable_trailends.get(x, y + 1)
                     )
-                    assert step_score in (0, 9), f"Invalid {step_score=}"
-                    scores.set(x, y, step_score)
-    return scores
+                    reachable_trailends.merge_trailends(x, y, reachable_from_here)
+    return reachable_trailends
 
-def get_sum_trailhead_scores(board: IntBoard):
-    scores = get_scores(board)
-    return sum(scores.get(x, y) for x in scores.get_x_range() for y in scores.get_y_range() if board.get(x, y) == 0)
+def get_sum_trailhead_scores(board: IntBoard, reachable_trailends: ReachableTrailends) -> int:
 
-test_reachable_trailends = get_scores(test_board)
-test_sum_trailhead_scores = get_sum_trailhead_scores(test_board)
+    return sum(len(reachable_trailends.get(x, y)) for x in board.get_x_range() for y in board.get_y_range() if board.get(x, y) == 0)
+
+test_reachable_trailends = get_reachable_trailends(test_board)
+test_sum_trailhead_scores = get_sum_trailhead_scores(test_board, test_reachable_trailends)
 assert test_sum_trailhead_scores == 36
 
 real_board = IntBoard(get_input_lines("input.txt"))
-real_sum_trailhead_scores = get_sum_trailhead_scores(real_board)
+real_reachable_trailends = get_reachable_trailends(real_board)
+real_sum_trailhead_scores = get_sum_trailhead_scores(real_board, real_reachable_trailends)
 print(f"ANSWER: {real_sum_trailhead_scores}")
