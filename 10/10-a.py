@@ -84,17 +84,21 @@ def get_reachable_trailends(board: IntBoard) -> ReachableTrailends:
 
     # Work backwards from trail end-1 to trail head
     # and set the reachable trailends as all the reachable trailends of the adjacent cells
+    # whose values match the step_end
     for step_start in range(9-1, -1, -1):
         step_end = step_start + 1
         for x in board.get_x_range():
             for y in board.get_y_range():
                 if board.get(x, y) == step_start:
-                    reachable_from_here = (
-                        reachable_trailends.get(x + 1, y) |
-                        reachable_trailends.get(x - 1, y) |
-                        reachable_trailends.get(x, y + 1) |
-                        reachable_trailends.get(x, y + 1)
-                    )
+                    reachable_from_here = set()
+                    if board.get(x + 1, y) == step_end:
+                        reachable_from_here |= reachable_trailends.get(x + 1, y)
+                    if board.get(x - 1, y) == step_end:
+                        reachable_from_here |= reachable_trailends.get(x - 1, y)
+                    if board.get(x, y - 1) == step_end:
+                        reachable_from_here |= reachable_trailends.get(x, y - 1)
+                    if board.get(x, y + 1) == step_end:
+                        reachable_from_here |= reachable_trailends.get(x, y + 1)
                     reachable_trailends.merge_trailends(x, y, reachable_from_here)
     return reachable_trailends
 
@@ -109,4 +113,5 @@ assert test_sum_trailhead_scores == 36
 real_board = IntBoard(get_input_lines("input.txt"))
 real_reachable_trailends = get_reachable_trailends(real_board)
 real_sum_trailhead_scores = get_sum_trailhead_scores(real_board, real_reachable_trailends)
+assert real_sum_trailhead_scores == 638
 print(f"ANSWER: {real_sum_trailhead_scores}")
