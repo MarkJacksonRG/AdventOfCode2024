@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Set, Tuple
 
 import numpy as np
 import numpy.typing as npt
@@ -38,22 +38,22 @@ assert test_board.get(0, -1) == -1
 assert test_board.get(8, 0) == -1
 assert test_board.get(0, 8) == -1
 
-class Scores:
+class ReachableTrailends:
     def __init__(self, board: IntBoard):
         self._x_range = board.get_x_range()
         self._y_range = board.get_y_range()
-        self.scores: npt.NDArray[np.int_] = np.array([[-1 for _ in board.get_x_range()] for _ in board.get_y_range()])
-        assert self.get(0,0) == -1
-        assert self.get(board.get_x_range().stop-1, board.get_y_range().stop-1) == -1
+        self.reachable_trailends: List[List[Set]] = [[set() for _ in board.get_x_range()] for _ in board.get_y_range()]
+        assert self.get(0,0) == set()
+        assert self.get(board.get_x_range().stop-1, board.get_y_range().stop-1) == set()
 
-    def get(self, x: int, y: int) -> int:
-        if 0 <= x < self.scores.shape[1] and 0 <= y < self.scores.shape[0]:
-            return int(self.scores[y][x])
+    def get(self, x: int, y: int) -> Set:
+        if x in self.get_x_range() and y in self.get_y_range():
+            return self.reachable_trailends[y][x]
         else:
-            return -1
+            return set()
 
-    def set(self, x: int, y: int, value: int):
-        self.scores[y][x] = value
+    def add_trailend(self, x: int, y: int, trailend: Tuple) -> None:
+        self.reachable_trailends[y][x].add(trailend)
 
     def get_x_range(self):
         return self._x_range
@@ -62,14 +62,16 @@ class Scores:
         return self._y_range
 
 
-test_scores = Scores(test_board)
-assert test_scores.get(0,0) == -1
-test_scores.set(0,0,0)
-assert test_scores.get(0,0) == 0
-assert test_scores.get(-1,0) == -1
-assert test_scores.get(0,-1) == -1
-assert test_scores.get(8,0) == -1
-assert test_scores.get(0,8) == -1
+test_reachable_trailends = ReachableTrailends(test_board)
+assert test_reachable_trailends.get(0, 0) == set()
+test_reachable_trailends.add_trailend(0, 0, (10, 10))
+assert test_reachable_trailends.get(0, 0) == {(10, 10)}
+test_reachable_trailends.add_trailend(0, 0, (20, 20))
+assert test_reachable_trailends.get(0, 0) == {(10, 10), (20, 20)}
+assert test_reachable_trailends.get(-1, 0) == set()
+assert test_reachable_trailends.get(0, -1) == set()
+assert test_reachable_trailends.get(8, 0) == set()
+assert test_reachable_trailends.get(0, 8) == set()
 
 def get_scores(board: IntBoard):
     # Create numpy array of integers with the same dimensions as the board
@@ -103,7 +105,7 @@ def get_sum_trailhead_scores(board: IntBoard):
     scores = get_scores(board)
     return sum(scores.get(x, y) for x in scores.get_x_range() for y in scores.get_y_range() if board.get(x, y) == 0)
 
-test_scores = get_scores(test_board)
+test_reachable_trailends = get_scores(test_board)
 test_sum_trailhead_scores = get_sum_trailhead_scores(test_board)
 assert test_sum_trailhead_scores == 36
 
