@@ -28,3 +28,18 @@ assert get_next_stones(1000) == [10, 0]
 assert get_next_stones(1234) == [12, 34]
 assert get_next_stones(12345) == [12345 * 2024]
 assert get_next_stones(123456) == [123, 456]
+
+def blink_stones(stones: list[int]) -> list[int]:
+    new_stones = []
+    for stone in stones:
+        new_stones.extend(get_next_stones(stone))
+    return new_stones
+
+assert blink_stones([0, 1, 10, 99, 999]) == [1, 2024, 1, 0, 9, 9, 2021976]
+
+# def how_many_stones_after_blinks(stones: list[int], n: int) -> int:
+#     for _ in range(n):
+#         stones = blink_stones(stones)
+#     return len(stones)
+#
+# assert how_many_stones_after_blinks(test_stones, 25) == 55312
