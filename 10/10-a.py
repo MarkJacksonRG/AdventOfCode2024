@@ -40,6 +40,8 @@ assert test_board.get(0, 8) == -1
 
 class Scores:
     def __init__(self, board: IntBoard):
+        self._x_range = board.get_x_range()
+        self._y_range = board.get_y_range()
         self.scores: npt.NDArray[np.int_] = np.array([[-1 for _ in board.get_x_range()] for _ in board.get_y_range()])
         assert self.get(0,0) == -1
         assert self.get(board.get_x_range().stop-1, board.get_y_range().stop-1) == -1
@@ -52,6 +54,13 @@ class Scores:
 
     def set(self, x: int, y: int, value: int):
         self.scores[y][x] = value
+
+    def get_x_range(self):
+        return self._x_range
+
+    def get_y_range(self):
+        return self._y_range
+
 
 test_scores = Scores(test_board)
 assert test_scores.get(0,0) == -1
@@ -90,4 +99,10 @@ def get_scores(board: IntBoard):
                     scores.set(x, y, step_score)
     return scores
 
-get_scores(test_board)
+def get_sum_trailhead_scores(board: IntBoard):
+    scores = get_scores(board)
+    return sum(scores.get(x, y) for x in scores.get_x_range() for y in scores.get_y_range() if board.get(x, y) == 0)
+
+test_scores = get_scores(test_board)
+test_sum_trailhead_scores = get_sum_trailhead_scores(test_board)
+assert test_sum_trailhead_scores == 36
