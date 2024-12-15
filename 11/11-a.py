@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime
 
 
@@ -8,11 +9,18 @@ def get_input_line(filename):
 test_line = get_input_line("test.txt")
 assert len(test_line) == 6
 
-def get_stones_from_line(line: str) -> list[int]:
-    return [int(x) for x in line.split(" ")]
+@dataclass(frozen=True)
+class Stone:
+    value: int
+    count: int = 1
+
+def get_stones_from_line(line: str) -> list[Stone]:
+    return [Stone(value=int(x)) for x in line.split(" ")]
 
 test_stones = get_stones_from_line(test_line)
-assert test_stones == [125, 17]
+assert test_stones == [Stone(value=125), Stone(value=17)]
+
+# TODO continue from here
 
 def get_next_stones(stone: int) -> list[int]:
     str_stone = str(stone)
@@ -42,7 +50,7 @@ assert blink_stones([0, 1, 10, 99, 999]) == [1, 2024, 1, 0, 9, 9, 2021976]
 
 def how_many_stones_after_blinks(stones: list[int], n: int) -> int:
     for i in range(n):
-        print(f"{datetime.now()} - {i} - {len(stones)}")
+        print(f"{datetime.now()} - {i} - {len(stones)} - {len(set(stones))}")
         stones = blink_stones(stones)
     return len(stones)
 
