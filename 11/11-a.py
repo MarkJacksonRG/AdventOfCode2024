@@ -37,9 +37,14 @@ def blink_stones(stones: list[int]) -> list[int]:
 
 assert blink_stones([0, 1, 10, 99, 999]) == [1, 2024, 1, 0, 9, 9, 2021976]
 
-# def how_many_stones_after_blinks(stones: list[int], n: int) -> int:
-#     for _ in range(n):
-#         stones = blink_stones(stones)
-#     return len(stones)
-#
-# assert how_many_stones_after_blinks(test_stones, 25) == 55312
+def how_many_stones_after_blinks(stones: list[int], n: int) -> int:
+    for _ in range(n):
+        stones = blink_stones(stones)
+    return len(stones)
+
+assert how_many_stones_after_blinks(test_stones, 25) == 55312
+
+real_line = get_input_line("input.txt")
+real_stones = get_stones_from_line(real_line)
+real_num_stones = how_many_stones_after_blinks(real_stones, 25)
+print(f"ANSWER = {real_num_stones}")
