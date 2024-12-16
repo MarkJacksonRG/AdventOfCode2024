@@ -58,8 +58,8 @@ class Region:
     def area(self):
         return len(self._points)
 
-def find_regions(board: Board) -> tuple[list[Region], dict[Point, Region]]:
-    regions: List[Region] = []
+def find_regions(board: Board) -> tuple[set[Region], dict[Point, Region]]:
+    regions: Set[Region] = set()
     point_to_region: Dict[Point, Region] = {}
 
     for y in board.get_y_range():
@@ -73,7 +73,7 @@ def find_regions(board: Board) -> tuple[list[Region], dict[Point, Region]]:
                         region = point_to_region[neighbour]
             if region is None:
                 region = Region(plant)
-                regions.append(region)
+                regions.add(region)
             region.add(point)
             point_to_region[point] = region
     return regions, point_to_region
