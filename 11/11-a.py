@@ -52,6 +52,19 @@ assert blink_stones([Stone(value=0), Stone(value=1), Stone(value=10), Stone(valu
     Stone(value=1), Stone(value=2024), Stone(value=1), Stone(value=0), Stone(value=9), Stone(value=9),
     Stone(value=2021976)]
 
+def compress_stones(stones: list[Stone]) -> list[Stone]:
+    compressed = {}
+    for stone in stones:
+        if stone.value in compressed:
+            compressed[stone.value] += stone.count
+        else:
+            compressed[stone.value] = stone.count
+    return [Stone(value=k, count=v) for k, v in compressed.items()]
+
+assert compress_stones([Stone(value=1), Stone(value=1, count=2), Stone(value=2), Stone(value=3, count=3), Stone(value=2, count=4)]) == [
+    Stone(value=1, count=3), Stone(value=2, count=5), Stone(value=3, count=3)]
+
+
 # TODO continue from here
 
 def how_many_stones_after_blinks(stones: list[Stone], n: int) -> int:
