@@ -20,33 +20,39 @@ def get_stones_from_line(line: str) -> list[Stone]:
 test_stones = get_stones_from_line(test_line)
 assert test_stones == [Stone(value=125), Stone(value=17)]
 
+def get_next_stones(current: Stone) -> list[Stone]:
+    str_stone = str(current.value)
+    len_str_stone = len(str_stone)
+    if current.value == 0:
+        return [Stone(value=1, count=current.count)]
+    elif len_str_stone % 2 == 0:
+        return [
+            Stone(value=int(str_stone[: len_str_stone//2]), count=current.count),
+            Stone(value=int(str_stone[len_str_stone//2: ]), count=current.count)
+        ]
+    else:
+        return [Stone(value= current.value * 2024, count=current.count)]
+
+assert get_next_stones(Stone(value=0)) == [Stone(value=1)]
+assert get_next_stones(Stone(value=12)) == [Stone(value=1), Stone(value=2)]
+assert get_next_stones(Stone(value=123)) == [Stone(value=123 * 2024)]
+assert get_next_stones(Stone(value=1000)) == [Stone(value= 10), Stone(value= 0)]
+assert get_next_stones(Stone(value=1234)) == [Stone(value= 12), Stone(value= 34)]
+assert get_next_stones(Stone(value=12345)) == [Stone(value=12345 * 2024)]
+assert get_next_stones(Stone(value=123456)) == [Stone(value=123), Stone(value=456)]
+
 # TODO continue from here
 
-def get_next_stones(stone: int) -> list[int]:
-    str_stone = str(stone)
-    len_str_stone = len(str_stone)
-    if stone == 0:
-        return [1]
-    elif len_str_stone % 2 == 0:
-        return [int(str_stone[: len_str_stone//2]), int(str_stone[len_str_stone//2: ])]
-    else:
-        return [stone * 2024]
-
-assert get_next_stones(0) == [1]
-assert get_next_stones(12) == [1, 2]
-assert get_next_stones(123) == [123 * 2024]
-assert get_next_stones(1000) == [10, 0]
-assert get_next_stones(1234) == [12, 34]
-assert get_next_stones(12345) == [12345 * 2024]
-assert get_next_stones(123456) == [123, 456]
-
-def blink_stones(stones: list[int]) -> list[int]:
+def blink_stones(stones: list[Stone]) -> list[Stone]:
     new_stones = []
     for stone in stones:
         new_stones.extend(get_next_stones(stone))
     return new_stones
 
-assert blink_stones([0, 1, 10, 99, 999]) == [1, 2024, 1, 0, 9, 9, 2021976]
+
+assert blink_stones([Stone(value=0), Stone(value=1), Stone(value=10), Stone(value=99), Stone(value=999)]) == [
+    Stone(value=1), Stone(value=2024), Stone(value=1), Stone(value=0), Stone(value=9), Stone(value=9),
+    Stone(value=2021976)]
 
 def how_many_stones_after_blinks(stones: list[int], n: int) -> int:
     for i in range(n):
