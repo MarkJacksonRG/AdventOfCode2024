@@ -1,5 +1,4 @@
 from collections import defaultdict
-import numpy as np
 from typing import List, Dict, Tuple, Set
 
 def get_input_lines(filename: str) -> List[str]:
@@ -12,8 +11,6 @@ toy1_lines = get_input_lines('toy1.txt')
 assert len(toy1_lines) == 4
 test_lines = get_input_lines('test.txt')
 assert len(test_lines) == 10
-
-# TODO: continue from here
 
 class Board:
     def __init__(self, lines: List[str]):
@@ -34,10 +31,11 @@ class Board:
 
 test_board = Board(test_lines)
 
-assert test_board.get(4, 4) == "0"
+assert test_board.get(4, 1) == "I"
 assert test_board.get(-1, 6) == "-"
-assert test_board.get(6, 5) == "A"
 assert test_board.get(4, -1) == "-"
+
+# TODO: continue from here
 
 def make_point_nparray(x: int, y: int) -> np.ndarray:
     return np.array([x, y])
