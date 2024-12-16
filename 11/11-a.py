@@ -80,4 +80,5 @@ assert real_num_stones == 203953
 print(f"ANSWER 11a = {real_num_stones}")
 
 real_num_stones2 = how_many_stones_after_blinks(real_stones, 75)
+assert real_num_stones2 == 242090118578155
 print(f"ANSWER 11b = {real_num_stones2}")
