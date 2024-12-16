@@ -33,15 +33,14 @@ def get_next_stones(current: Stone) -> list[Stone]:
     else:
         return [Stone(value= current.value * 2024, count=current.count)]
 
-assert get_next_stones(Stone(value=0)) == [Stone(value=1)]
-assert get_next_stones(Stone(value=12)) == [Stone(value=1), Stone(value=2)]
-assert get_next_stones(Stone(value=123)) == [Stone(value=123 * 2024)]
-assert get_next_stones(Stone(value=1000)) == [Stone(value= 10), Stone(value= 0)]
-assert get_next_stones(Stone(value=1234)) == [Stone(value= 12), Stone(value= 34)]
-assert get_next_stones(Stone(value=12345)) == [Stone(value=12345 * 2024)]
-assert get_next_stones(Stone(value=123456)) == [Stone(value=123), Stone(value=456)]
-
-# TODO continue from here
+for count in range(1, 3):
+    assert get_next_stones(Stone(value=0, count=count)) == [Stone(value=1, count=count)]
+    assert get_next_stones(Stone(value=12, count=count)) == [Stone(value=1, count=count), Stone(value=2, count=count)]
+    assert get_next_stones(Stone(value=123, count=count)) == [Stone(value=123 * 2024, count=count)]
+    assert get_next_stones(Stone(value=1000, count=count)) == [Stone(value= 10, count=count), Stone(value= 0, count=count)]
+    assert get_next_stones(Stone(value=1234, count=count)) == [Stone(value= 12, count=count), Stone(value= 34, count=count)]
+    assert get_next_stones(Stone(value=12345, count=count)) == [Stone(value=12345 * 2024, count=count)]
+    assert get_next_stones(Stone(value=123456, count=count)) == [Stone(value=123, count=count), Stone(value=456, count=count)]
 
 def blink_stones(stones: list[Stone]) -> list[Stone]:
     new_stones = []
@@ -49,12 +48,13 @@ def blink_stones(stones: list[Stone]) -> list[Stone]:
         new_stones.extend(get_next_stones(stone))
     return new_stones
 
-
 assert blink_stones([Stone(value=0), Stone(value=1), Stone(value=10), Stone(value=99), Stone(value=999)]) == [
     Stone(value=1), Stone(value=2024), Stone(value=1), Stone(value=0), Stone(value=9), Stone(value=9),
     Stone(value=2021976)]
 
-def how_many_stones_after_blinks(stones: list[int], n: int) -> int:
+# TODO continue from here
+
+def how_many_stones_after_blinks(stones: list[Stone], n: int) -> int:
     for i in range(n):
         print(f"{datetime.now()} - {i} - {len(stones)} - {len(set(stones))}")
         stones = blink_stones(stones)
