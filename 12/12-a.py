@@ -1,4 +1,5 @@
-from collections import defaultdict
+from collections import defaultdict, namedtuple
+from dataclasses import dataclass
 from typing import List, Dict, Tuple, Set
 
 def get_input_lines(filename: str) -> List[str]:
@@ -36,74 +37,43 @@ assert test_board.get(-1, 6) == "-"
 assert test_board.get(4, -1) == "-"
 
 # TODO: continue from here
+@dataclass
+class Point:
+    x: int
+    y: int
 
-def make_point_nparray(x: int, y: int) -> np.ndarray:
-    return np.array([x, y])
+class Region:
+    _points: Set[Point]
 
-def get_frequencies(board: Board) -> Dict[str, List[np.ndarray]]:
-    frequencies = defaultdict(list)
+    def __init__(self, plant: str):
+        self._points = set()
+        self.plant = plant
+
+    def add(self, point: Point):
+        self._points.add(point)
+
+    def contains(self, point: Point) -> bool:
+        return point in self._points
+
+    def area(self):
+        return len(self._points)
+
+def find_regions(board: Board) -> tuple[list[Region], dict[Point, Region]]:
+    regions: List[Region] = []
+    point_to_region: Dict[Point, Region] = {}
+
     for y in board.get_y_range():
         for x in board.get_x_range():
-            val = board.get(x, y)
-            if val != ".":
-                frequencies[val].append(np.array([x, y]))
-    return frequencies
-
-test_frequencies = get_frequencies(test_board)
-assert len(test_frequencies) == 2
-assert len(test_frequencies["0"]) == 4
-assert len(test_frequencies["A"]) == 3
-assert (test_frequencies["0"][0] == np.array((8, 1))).all()
-assert (test_frequencies["0"][3] == np.array((4, 4))).all()
-
-def get_pairs(board: Board, frequency: str) -> List[Tuple[np.ndarray, np.ndarray]]:
-    pairs = []
-    points = get_frequencies(board).get(frequency)
-    for i in range(len(points)):
-        for j in range(i + 1, len(points)):
-            pairs.append((points[i], points[j]))
-    return pairs
-
-test_pairs1 = get_pairs(test_board, "0")
-assert len(test_pairs1) == 6
-assert (make_point_nparray(8, 1) == test_pairs1[2][0]).all()
-assert (make_point_nparray(4, 4) == test_pairs1[2][1]).all()
-
-def get_antinodes_for_pair(board: Board, pair: Tuple[np.ndarray, np.ndarray]) -> Set[Tuple[int, int]]:
-    p1, p2 = pair
-    antinodes = set()
-    for start, delta in (p2, p2 - p1), (p1, p1 - p2):
-        i = 0
-        while True:
-            candidate = start + i * delta
-            if board.get(candidate[0], candidate[1]) == "-":
-                break
-            antinodes.add(tuple(candidate))
-            i += 1
-    return antinodes
-
-test_antinodes1 = get_antinodes_for_pair(test_board, (make_point_nparray(8, 1), make_point_nparray(6, 2)))
-assert len(test_antinodes1) == 6
-assert (4, 3) in test_antinodes1
-assert (10, 0) in test_antinodes1
-assert (2, 4) in test_antinodes1
-assert (0, 5) in test_antinodes1
-assert (8, 1) in test_antinodes1
-assert (6, 2) in test_antinodes1
-
-def get_all_antinodes(board: Board, frequencies: Dict[str, List[np.ndarray]]) -> Set[Tuple[int, int]]:
-    antinodes = set()
-    for frequency in frequencies:
-        for pair in get_pairs(board, frequency):
-            antinodes |= get_antinodes_for_pair(board, pair)
-    return antinodes
-
-test_antinodes = get_all_antinodes(test_board, test_frequencies)
-assert len(test_antinodes) == 34
-
-real_lines = get_input_lines('input.txt')
-real_board = Board(real_lines)
-real_frequencies = get_frequencies(real_board)
-real_antinodes = get_all_antinodes(real_board, real_frequencies)
-assert len(real_antinodes) == 927
-print(f"ANSWER: {len(real_antinodes)}")
+            point = Point(x, y)
+            plant = board.get(x, y)
+            region: Region | None = None
+            for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                if region is None and board.get(x + dx, y + dy) == plant:
+                    if (neighbour := Point(x + dx, y + dy)) in point_to_region:
+                        region = point_to_region[neighbour]
+            if region is None:
+                region = Region(plant)
+                regions.append(region)
+            region.add(point)
+            point_to_region[point] = region
+    return regions, point_to_region
