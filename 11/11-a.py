@@ -64,16 +64,14 @@ def compress_stones(stones: list[Stone]) -> list[Stone]:
 assert compress_stones([Stone(value=1), Stone(value=1, count=2), Stone(value=2), Stone(value=3, count=3), Stone(value=2, count=4)]) == [
     Stone(value=1, count=3), Stone(value=2, count=5), Stone(value=3, count=3)]
 
-
-# TODO continue from here
-
 def how_many_stones_after_blinks(stones: list[Stone], n: int) -> int:
     for i in range(n):
         print(f"{datetime.now()} - {i} - {len(stones)} - {len(set(stones))}")
-        stones = blink_stones(stones)
-    return len(stones)
+        stones = compress_stones(blink_stones(stones))
+    return sum(s.count for s in stones)
 
-assert how_many_stones_after_blinks(test_stones, 25) == 55312
+test_num_stones = how_many_stones_after_blinks(test_stones, 25)
+assert test_num_stones == 55312
 
 real_line = get_input_line("input.txt")
 real_stones = get_stones_from_line(real_line)
