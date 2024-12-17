@@ -98,7 +98,16 @@ assert toy1_region_A.perimeter() == 10
 toy_region_B = toy1_point_to_region[Point(0, 1)]
 assert toy_region_B.plant == "B"
 assert toy_region_B.perimeter() == 8
+toy1_region_C = toy1_point_to_region[Point(2, 1)]
+assert toy1_region_C.plant == "C"
+assert toy1_region_C.area() == 4
+assert toy1_region_C.perimeter() == 10
 toy1_region_D = toy1_point_to_region[Point(3, 1)]
 assert toy1_region_D.plant == "D"
 assert toy1_region_D.area() == 1
 assert toy1_region_D.perimeter() == 4
+
+def get_price(regions: set[Region]) -> int:
+    return sum(region.area() * region.perimeter() for region in regions)
+
+assert get_price(toy1_regions) == 140
