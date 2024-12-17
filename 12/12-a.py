@@ -149,3 +149,7 @@ test_regions, test_point_to_region = find_regions(test_board)
 assert len(test_regions) == 11
 assert get_price(test_regions) == 1930
 
+real_regions, real_point_to_region = find_regions(Board(get_input_lines('input.txt')))
+real_price = get_price(real_regions)
+assert real_price == 1377008
+print(f"Part 1: {real_price=}")
