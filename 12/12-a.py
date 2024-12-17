@@ -36,7 +36,6 @@ assert test_board.get(4, 1) == "I"
 assert test_board.get(-1, 6) == "-"
 assert test_board.get(4, -1) == "-"
 
-# TODO: continue from here
 @dataclass(frozen=True)
 class Point:
     x: int
@@ -57,6 +56,15 @@ class Region:
 
     def area(self):
         return len(self._points)
+
+    def perimeter(self):
+        perimeter = 0
+        for point in self._points:
+            for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                neighbour = Point(point.x + dx, point.y + dy)
+                if not self.contains(neighbour):
+                    perimeter += 1
+        return perimeter
 
 def find_regions(board: Board) -> tuple[set[Region], dict[Point, Region]]:
     regions: Set[Region] = set()
@@ -86,3 +94,11 @@ assert sum(region.area() for region in toy1_regions) == 16
 assert all(toy1_point_to_region[Point(x, y)].plant == plant for y, row in enumerate(toy1_lines) for x, plant in enumerate(row))
 toy1_region_A = toy1_point_to_region[Point(0, 0)]
 assert toy1_region_A.area() == 4
+assert toy1_region_A.perimeter() == 10
+toy_region_B = toy1_point_to_region[Point(0, 1)]
+assert toy_region_B.plant == "B"
+assert toy_region_B.perimeter() == 8
+toy1_region_D = toy1_point_to_region[Point(3, 1)]
+assert toy1_region_D.plant == "D"
+assert toy1_region_D.area() == 1
+assert toy1_region_D.perimeter() == 4
