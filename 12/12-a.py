@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Dict, Set
 
+
 def get_input_lines(filename: str) -> List[str]:
     with open(filename, "r") as file:
         lines = file.read()
@@ -41,24 +42,27 @@ class Point:
     y: int
 
 class Region:
-    _points: Set[Point]
+    points: Set[Point]
 
     def __init__(self, plant: str):
-        self._points = set()
+        self.points = set()
         self.plant = plant
 
     def add(self, point: Point):
-        self._points.add(point)
+        self.points.add(point)
+
+    def add_points(self, points: Set[Point]):
+        self.points.update(points)
 
     def contains(self, point: Point) -> bool:
-        return point in self._points
+        return point in self.points
 
     def area(self):
-        return len(self._points)
+        return len(self.points)
 
     def perimeter(self):
         perimeter = 0
-        for point in self._points:
+        for point in self.points:
             for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
                 neighbour = Point(point.x + dx, point.y + dy)
                 if not self.contains(neighbour):
@@ -68,7 +72,6 @@ class Region:
 def find_regions(board: Board) -> tuple[set[Region], dict[Point, Region]]:
     point_to_region: Dict[Point, Region] = {}
 
-    # TODO coalesce regions that touch
     for y in board.get_y_range():
         for x in board.get_x_range():
             point = Point(x, y)
@@ -82,36 +85,58 @@ def find_regions(board: Board) -> tuple[set[Region], dict[Point, Region]]:
                 region = Region(plant)
             region.add(point)
             point_to_region[point] = region
+
+    # coalesce regions that touch
+    regions = set(point_to_region.values())
+    for region in regions:
+        new_points: Set[Point] = set()
+        for point in region.points:
+            for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                neighbour = Point(point.x + dx, point.y + dy)
+                if board.get(neighbour.x, neighbour.y) == region.plant:
+                    if neighbour not in region.points and neighbour not in new_points:
+                        new_points.add(neighbour)
+                        point_to_region[neighbour].points.remove(neighbour)
+                        point_to_region[neighbour] = region
+        region.add_points(new_points)
+
+    # remove empty regions
     regions = set(point_to_region.values())
     return regions, point_to_region
-
-toy1_board = Board(toy1_lines)
-toy1_regions, toy1_point_to_region = find_regions(toy1_board)
-
-assert len(toy1_regions) == 5
-assert sum(region.area() for region in toy1_regions) == 16
-assert all(toy1_point_to_region[Point(x, y)].plant == plant for y, row in enumerate(toy1_lines) for x, plant in enumerate(row))
-toy1_region_A = toy1_point_to_region[Point(0, 0)]
-assert toy1_region_A.area() == 4
-assert toy1_region_A.perimeter() == 10
-toy_region_B = toy1_point_to_region[Point(0, 1)]
-assert toy_region_B.plant == "B"
-assert toy_region_B.perimeter() == 8
-toy1_region_C = toy1_point_to_region[Point(2, 1)]
-assert toy1_region_C.plant == "C"
-assert toy1_region_C.area() == 4
-assert toy1_region_C.perimeter() == 10
-toy1_region_D = toy1_point_to_region[Point(3, 1)]
-assert toy1_region_D.plant == "D"
-assert toy1_region_D.area() == 1
-assert toy1_region_D.perimeter() == 4
 
 def get_price(regions: set[Region]) -> int:
     return sum(region.area() * region.perimeter() for region in regions)
 
-assert get_price(toy1_regions) == 140
+
+def test_toy1():
+    toy1_board = Board(toy1_lines)
+    toy1_regions, toy1_point_to_region = find_regions(toy1_board)
+    assert len(toy1_regions) == 5
+    assert sum(region.area() for region in toy1_regions) == 16
+    assert all(toy1_point_to_region[Point(x, y)].plant == plant for y, row in enumerate(toy1_lines) for x, plant in
+               enumerate(row))
+    toy1_region_A = toy1_point_to_region[Point(0, 0)]
+    assert toy1_region_A.area() == 4
+    assert toy1_region_A.perimeter() == 10
+    toy_region_B = toy1_point_to_region[Point(0, 1)]
+    assert toy_region_B.plant == "B"
+    assert toy_region_B.perimeter() == 8
+    toy1_region_C = toy1_point_to_region[Point(2, 1)]
+    assert toy1_region_C.plant == "C"
+    assert toy1_region_C.area() == 4
+    assert toy1_region_C.perimeter() == 10
+    toy1_region_D = toy1_point_to_region[Point(3, 1)]
+    assert toy1_region_D.plant == "D"
+    assert toy1_region_D.area() == 1
+    assert toy1_region_D.perimeter() == 4
+
+    assert get_price(toy1_regions) == 140
+
+test_toy1()
+
+
 
 # TODO fix this
-# test_regions, test_point_to_region = find_regions(test_board)
-# assert len(test_regions) == 11
-# assert get_price(test_regions) == 1930
+test_regions, test_point_to_region = find_regions(test_board)
+assert len(test_regions) == 11
+assert get_price(test_regions) == 1930
