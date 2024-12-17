@@ -129,10 +129,6 @@ def test_toy1():
     assert toy1_region_A.area() == 4
     assert toy1_region_A.perimeter() == 10
     assert toy1_region_A == toy1_point_to_region[Point(1, 0)]
-
-    # toy1_region_A.add(Point(999, 999)) # TODO delete this
-    # assert Point(999, 999) in toy1_point_to_region[Point(1, 0)].points # TODO delete this
-
     toy_region_B = toy1_point_to_region[Point(0, 1)]
     assert toy_region_B.plant == "B"
     assert toy_region_B.perimeter() == 8
@@ -149,9 +145,7 @@ def test_toy1():
 
 test_toy1()
 
-
-
-# TODO fix this
 test_regions, test_point_to_region = find_regions(test_board)
 assert len(test_regions) == 11
 assert get_price(test_regions) == 1930
+
