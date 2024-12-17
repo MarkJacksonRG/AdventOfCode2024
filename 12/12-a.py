@@ -70,6 +70,7 @@ class Region:
         return perimeter
 
 def find_regions(board: Board) -> tuple[set[Region], dict[Point, Region]]:
+    print("FIND REGIONS")
     point_to_region: Dict[Point, Region] = {}
 
     for y in board.get_y_range():
@@ -86,19 +87,28 @@ def find_regions(board: Board) -> tuple[set[Region], dict[Point, Region]]:
             region.add(point)
             point_to_region[point] = region
 
-    # coalesce regions that touch
-    regions = set(point_to_region.values())
-    for region in regions:
-        new_points: Set[Point] = set()
-        for point in region.points:
-            for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
-                neighbour = Point(point.x + dx, point.y + dy)
-                if board.get(neighbour.x, neighbour.y) == region.plant:
-                    if neighbour not in region.points and neighbour not in new_points:
-                        new_points.add(neighbour)
-                        point_to_region[neighbour].points.remove(neighbour)
-                        point_to_region[neighbour] = region
-        region.add_points(new_points)
+    # coalesce regions that are connected
+    coalesced = True
+    while coalesced:
+        coalesced = False
+        regions = set(point_to_region.values())
+        print(f"  Coalescing: {len(regions)=}")
+        for region in regions:
+            connected_regions: Set[Region] = set()
+            for point in region.points:
+                for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                    neighbour = Point(point.x + dx, point.y + dy)
+                    if board.get(neighbour.x, neighbour.y) == region.plant:
+                        if neighbour not in region.points:
+                            coalesced = True
+                            print(f"    Coalescing {region.plant} at {point} with {neighbour}")
+                            connected_regions.add(point_to_region[neighbour])
+            if connected_regions:
+                for connected_region in connected_regions:
+                    for point in connected_region.points:
+                        point_to_region[point] = region
+                        region.add(point)
+                    connected_region.points.clear()
 
     # remove empty regions
     regions = set(point_to_region.values())
@@ -118,6 +128,11 @@ def test_toy1():
     toy1_region_A = toy1_point_to_region[Point(0, 0)]
     assert toy1_region_A.area() == 4
     assert toy1_region_A.perimeter() == 10
+    assert toy1_region_A == toy1_point_to_region[Point(1, 0)]
+
+    # toy1_region_A.add(Point(999, 999)) # TODO delete this
+    # assert Point(999, 999) in toy1_point_to_region[Point(1, 0)].points # TODO delete this
+
     toy_region_B = toy1_point_to_region[Point(0, 1)]
     assert toy_region_B.plant == "B"
     assert toy_region_B.perimeter() == 8
