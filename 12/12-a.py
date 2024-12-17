@@ -84,3 +84,5 @@ toy1_regions, toy1_point_to_region = find_regions(toy1_board)
 assert len(toy1_regions) == 5
 assert sum(region.area() for region in toy1_regions) == 16
 assert all(toy1_point_to_region[Point(x, y)].plant == plant for y, row in enumerate(toy1_lines) for x, plant in enumerate(row))
+toy1_region_A = toy1_point_to_region[Point(0, 0)]
+assert toy1_region_A.area() == 4
