@@ -1,6 +1,5 @@
-from collections import defaultdict, namedtuple
 from dataclasses import dataclass
-from typing import List, Dict, Tuple, Set
+from typing import List, Dict, Set
 
 def get_input_lines(filename: str) -> List[str]:
     with open(filename, "r") as file:
@@ -67,9 +66,9 @@ class Region:
         return perimeter
 
 def find_regions(board: Board) -> tuple[set[Region], dict[Point, Region]]:
-    regions: Set[Region] = set()
     point_to_region: Dict[Point, Region] = {}
 
+    # TODO coalesce regions that touch
     for y in board.get_y_range():
         for x in board.get_x_range():
             point = Point(x, y)
@@ -81,9 +80,9 @@ def find_regions(board: Board) -> tuple[set[Region], dict[Point, Region]]:
                         region = point_to_region[neighbour]
             if region is None:
                 region = Region(plant)
-                regions.add(region)
             region.add(point)
             point_to_region[point] = region
+    regions = set(point_to_region.values())
     return regions, point_to_region
 
 toy1_board = Board(toy1_lines)
@@ -111,3 +110,8 @@ def get_price(regions: set[Region]) -> int:
     return sum(region.area() * region.perimeter() for region in regions)
 
 assert get_price(toy1_regions) == 140
+
+# TODO fix this
+# test_regions, test_point_to_region = find_regions(test_board)
+# assert len(test_regions) == 11
+# assert get_price(test_regions) == 1930
