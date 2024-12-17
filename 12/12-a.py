@@ -37,7 +37,7 @@ assert test_board.get(-1, 6) == "-"
 assert test_board.get(4, -1) == "-"
 
 # TODO: continue from here
-@dataclass
+@dataclass(frozen=True)
 class Point:
     x: int
     y: int
@@ -77,3 +77,10 @@ def find_regions(board: Board) -> tuple[set[Region], dict[Point, Region]]:
             region.add(point)
             point_to_region[point] = region
     return regions, point_to_region
+
+toy1_board = Board(toy1_lines)
+toy1_regions, toy1_point_to_region = find_regions(toy1_board)
+
+assert len(toy1_regions) == 5
+assert sum(region.area() for region in toy1_regions) == 16
+assert all(toy1_point_to_region[Point(x, y)].plant == plant for y, row in enumerate(toy1_lines) for x, plant in enumerate(row))
