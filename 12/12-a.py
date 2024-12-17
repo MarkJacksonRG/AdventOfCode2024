@@ -52,7 +52,7 @@ class Region:
         self.points.add(point)
 
     def add_points(self, points: Set[Point]):
-        self.points.update(points)
+        self.points |= points
 
     def contains(self, point: Point) -> bool:
         return point in self.points
