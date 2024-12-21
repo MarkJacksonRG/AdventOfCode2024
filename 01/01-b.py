@@ -37,8 +37,8 @@ def split_lines_to_two_lists(split_lines):
 real_split_lines = get_split_input_lines("input.txt")
 real_list1, real_list2 = split_lines_to_two_lists(real_split_lines)
 
-def get_num_occurrences(some_list: List[int]) -> dict[Any, Any]:
-    num_occurrences: dict[Any, Any]  = {}
+def get_num_occurrences(some_list: List[int]) -> dict[int, int]:
+    num_occurrences: dict[int, int]  = {}
     for item in some_list:
         num_occurrences[item] = num_occurrences.get(item, 0) + 1
     return num_occurrences
