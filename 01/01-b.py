@@ -1,9 +1,7 @@
 # open the file input.txt and read the content
 # and print the content of the file
 # if the file does not exist, print "File not found"
-from typing import Any, List, Dict
-
-from mypy.checkexpr import defaultdict
+from collections import Counter
 
 
 def get_input_lines(filename):
@@ -39,13 +37,7 @@ def split_lines_to_two_lists(split_lines):
 real_split_lines = get_split_input_lines("input.txt")
 real_list1, real_list2 = split_lines_to_two_lists(real_split_lines)
 
-def get_num_occurrences(some_list: List[int]) -> dict[int, int]:
-    num_occurrences: dict[int, int]  = defaultdict(lambda : 0)
-    for item in some_list:
-        num_occurrences[item] += 1
-    return num_occurrences
-
-num_occurrences2 = (get_num_occurrences(real_list2))
+num_occurrences2 = (Counter(real_list2))
 
 similarity_score = 0
 for next1 in real_list1:
