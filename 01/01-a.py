@@ -26,11 +26,7 @@ def split_lines_to_two_lists(split_lines: list[list[str]]) -> tuple[list[str], l
     return list1, list2
 
 def calculate_difference(sorted_pairs: List[Tuple[str, str]]) -> int:
-    sum_diffs = 0
-    for pair in sorted_pairs:
-        diff = abs(int(pair[0]) - abs(int(pair[1])))
-        sum_diffs += diff
-    return sum_diffs
+    return sum(abs(int(pair[0]) - abs(int(pair[1]))) for pair in sorted_pairs)
 
 real_split_lines = get_split_input_lines("input.txt")
 real_list1, real_list2 = split_lines_to_two_lists(real_split_lines)
