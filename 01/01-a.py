@@ -5,16 +5,9 @@ from helpers.helpers import get_input_lines
 
 def get_split_input_lines(filename: str) -> list[list[str]]:
     lines = get_input_lines(filename)
-    split_lines = []
-    for line in lines:
-        # Split by spaces
-        line = line.split("   ")
-        assert len(line) == 2
-        # Check the entries are numbers
-        assert line[0].isdigit()
-        assert line[1].isdigit()
-
-        split_lines.append(line)
+    split_lines = [line.split("   ") for line in lines]
+    assert all(len(line) == 2 for line in split_lines)
+    assert all(line[0].isdigit() and line[1].isdigit() for line in split_lines)
     return split_lines
 
 def split_lines_to_two_lists(split_lines: list[list[str]]) -> tuple[list[str], list[str]]:
