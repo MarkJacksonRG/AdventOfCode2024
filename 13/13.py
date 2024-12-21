@@ -6,16 +6,27 @@ test_lines = get_input_lines("test.txt")
 assert len(test_lines) == 15
 
 @dataclass(frozen=True)
+class ButtonPresses:
+    a: int
+    b: int
+
+    def __repr__(self):
+        return f"ButtonPresses(a={self.a}, b={self.b})"
+
+@dataclass(frozen=True)
 class Machine:
     a: Point
     b: Point
     prize: Point
 
-    def get_position(self, n_a: int, n_b: int) -> Point:
+    def get_position(self, presses: ButtonPresses) -> Point:
         return Point(
-            n_a * self.a.x + n_b * self.b.x,
-            n_a * self.a.y + n_b * self.b.y
+            presses.a * self.a.x + presses.b * self.b.x,
+            presses.a * self.a.y + presses.b * self.b.y
         )
+
+    # def get_cheapest_prize(self) -> Point | None:
+
 
     def __repr__(self):
         return f"Machine(a={self.a}, b={self.b}, prize={self.prize})"
@@ -53,5 +64,5 @@ for m in test_machines:
     print(m)
 
 assert test_machines[0] == Machine(a=Point(x=94, y=34), b=Point(x=22, y=67), prize=Point(x=8400, y=5400))
-assert test_machines[0].get_position(1, 1) == Point(x=94+22, y=34+67)
-assert test_machines[0].get_position(80, 40) == test_machines[0].prize
+assert test_machines[0].get_position( ButtonPresses(1, 1)) == Point(x=94+22, y=34+67)
+assert test_machines[0].get_position(ButtonPresses(80, 40)) == test_machines[0].prize
