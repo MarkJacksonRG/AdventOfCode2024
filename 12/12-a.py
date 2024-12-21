@@ -1,5 +1,6 @@
-from dataclasses import dataclass
 from typing import List, Dict, Set
+
+from helpers.helpers import Point
 
 
 def get_input_lines(filename: str) -> List[str]:
@@ -36,10 +37,6 @@ assert test_board.get(4, 1) == "I"
 assert test_board.get(-1, 6) == "-"
 assert test_board.get(4, -1) == "-"
 
-@dataclass(frozen=True)
-class Point:
-    x: int
-    y: int
 
 class Region:
     points: Set[Point]
