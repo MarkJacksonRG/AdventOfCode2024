@@ -1,13 +1,6 @@
-from typing import List, Set, Tuple
+from typing import List, Set
 
-import numpy as np
-import numpy.typing as npt
-
-
-def get_input_lines(filename):
-    with open(filename, "r") as file:
-        lines = file.read()
-    return lines.split("\n")
+from helpers.helpers import get_input_lines
 
 test_lines = get_input_lines("test.txt")
 assert len(test_lines) == 8
