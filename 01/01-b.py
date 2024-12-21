@@ -3,6 +3,8 @@
 # if the file does not exist, print "File not found"
 from typing import Any, List, Dict
 
+from mypy.checkexpr import defaultdict
+
 
 def get_input_lines(filename):
     with open(filename, "r") as file:
@@ -38,9 +40,9 @@ real_split_lines = get_split_input_lines("input.txt")
 real_list1, real_list2 = split_lines_to_two_lists(real_split_lines)
 
 def get_num_occurrences(some_list: List[int]) -> dict[int, int]:
-    num_occurrences: dict[int, int]  = {}
+    num_occurrences: dict[int, int]  = defaultdict(lambda : 0)
     for item in some_list:
-        num_occurrences[item] = num_occurrences.get(item, 0) + 1
+        num_occurrences[item] += 1
     return num_occurrences
 
 num_occurrences2 = (get_num_occurrences(real_list2))
