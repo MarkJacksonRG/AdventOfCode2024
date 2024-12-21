@@ -102,3 +102,9 @@ def get_min_tokens_to_win_all_prizes(machines: list[Machine]) -> int:
 
 test_min_tokens = get_min_tokens_to_win_all_prizes(test_machines)
 assert test_min_tokens == 480
+
+real_lines = get_input_lines("input.txt")
+real_machines = get_machines_from_lines(real_lines)
+real_min_tokens = get_min_tokens_to_win_all_prizes(real_machines)
+assert real_min_tokens == 31761
+print(f"Real min tokens: {real_min_tokens}")
