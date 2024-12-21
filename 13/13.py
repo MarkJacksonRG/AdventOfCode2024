@@ -11,6 +11,15 @@ class Machine:
     b: Point
     prize: Point
 
+    def get_position(self, n_a: int, n_b: int) -> Point:
+        return Point(
+            n_a * self.a.x + n_b * self.b.x,
+            n_a * self.a.y + n_b * self.b.y
+        )
+
+    def __repr__(self):
+        return f"Machine(a={self.a}, b={self.b}, prize={self.prize})"
+
 
 def get_machines_from_lines(lines: list[str]) -> list[Machine]:
     machines = []
@@ -19,7 +28,7 @@ def get_machines_from_lines(lines: list[str]) -> list[Machine]:
         a = get_point_from_button_line("A", lines[i])
         b = get_point_from_button_line("B", lines[i+1])
         prize = get_point_from_prize_line(lines[i+2])
-        print(a, b, prize)
+        machines.append(Machine(a, b, prize))
         i += 4
     return machines
 
@@ -40,3 +49,9 @@ def get_point_from_prize_line(line) -> Point:
     return Point(x, y)
 
 test_machines = get_machines_from_lines(test_lines)
+for m in test_machines:
+    print(m)
+
+assert test_machines[0] == Machine(a=Point(x=94, y=34), b=Point(x=22, y=67), prize=Point(x=8400, y=5400))
+assert test_machines[0].get_position(1, 1) == Point(x=94+22, y=34+67)
+assert test_machines[0].get_position(80, 40) == test_machines[0].prize
