@@ -1,7 +1,7 @@
 # open the file input.txt and read the content
 # and print the content of the file
 # if the file does not exist, print "File not found"
-from typing import Any
+from typing import Any, List, Dict
 
 
 def get_input_lines(filename):
@@ -37,13 +37,10 @@ def split_lines_to_two_lists(split_lines):
 real_split_lines = get_split_input_lines("input.txt")
 real_list1, real_list2 = split_lines_to_two_lists(real_split_lines)
 
-def get_num_occurrences(some_list):
+def get_num_occurrences(some_list: List[int]) -> dict[Any, Any]:
     num_occurrences: dict[Any, Any]  = {}
     for item in some_list:
-        if item in num_occurrences:
-            num_occurrences[item] += 1
-        else:
-            num_occurrences[item] = 1
+        num_occurrences[item] = num_occurrences.get(item, 0) + 1
     return num_occurrences
 
 num_occurrences2 = (get_num_occurrences(real_list2))
