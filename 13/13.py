@@ -13,6 +13,10 @@ class ButtonPresses:
     def __repr__(self):
         return f"ButtonPresses(a={self.a}, b={self.b})"
 
+    def price(self) -> int:
+        return self.a * 3 + self.b
+
+
 @dataclass(frozen=True)
 class Machine:
     a: Point
@@ -25,7 +29,22 @@ class Machine:
             presses.a * self.a.y + presses.b * self.b.y
         )
 
-    # def get_cheapest_prize(self) -> Point | None:
+    def get_cheapest_prize_presses(self) -> ButtonPresses | None:
+        cheapest_prize_presses: ButtonPresses | None = None
+        for a in range(101):
+            b = 0
+            presses = ButtonPresses(a, b)
+            position = self.get_position(presses)
+            while b in range(101) and position.x <= self.prize.x and position.y <= self.prize.y:
+                position = self.get_position(presses)
+                if position == self.prize:
+                    if cheapest_prize_presses is None or cheapest_prize_presses.price() < cheapest_prize_presses.price():
+                        cheapest_prize_presses = presses
+
+                b += 1
+                presses = ButtonPresses(a, b)
+
+        return cheapest_prize_presses
 
 
     def __repr__(self):
@@ -49,6 +68,7 @@ def get_point_from_button_line(button_name: str, line: str) -> Point:
     assert len(button_bits) == 2
     x = int(button_bits[0][2:])
     y = int(button_bits[1][2:])
+    assert x >= 0 and y >=0
     return Point(x, y)
 
 def get_point_from_prize_line(line) -> Point:
@@ -66,3 +86,8 @@ for m in test_machines:
 assert test_machines[0] == Machine(a=Point(x=94, y=34), b=Point(x=22, y=67), prize=Point(x=8400, y=5400))
 assert test_machines[0].get_position( ButtonPresses(1, 1)) == Point(x=94+22, y=34+67)
 assert test_machines[0].get_position(ButtonPresses(80, 40)) == test_machines[0].prize
+
+assert test_machines[0].get_cheapest_prize_presses() == ButtonPresses(80, 40)
+assert test_machines[1].get_cheapest_prize_presses() is None
+assert test_machines[2].get_cheapest_prize_presses() == ButtonPresses(38, 86)
+assert test_machines[3].get_cheapest_prize_presses() is None
