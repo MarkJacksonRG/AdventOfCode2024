@@ -46,6 +46,11 @@ class Machine:
 
         return cheapest_prize_presses
 
+    def get_price_of_cheapest_prize_presses(self) -> int:
+        cheapest_prize_presses = self.get_cheapest_prize_presses()
+        if cheapest_prize_presses is None:
+            return 0
+        return cheapest_prize_presses.price()
 
     def __repr__(self):
         return f"Machine(a={self.a}, b={self.b}, prize={self.prize})"
@@ -91,3 +96,9 @@ assert test_machines[0].get_cheapest_prize_presses() == ButtonPresses(80, 40)
 assert test_machines[1].get_cheapest_prize_presses() is None
 assert test_machines[2].get_cheapest_prize_presses() == ButtonPresses(38, 86)
 assert test_machines[3].get_cheapest_prize_presses() is None
+
+def get_min_tokens_to_win_all_prizes(machines: list[Machine]) -> int:
+    return sum(m.get_price_of_cheapest_prize_presses() for m in machines)
+
+test_min_tokens = get_min_tokens_to_win_all_prizes(test_machines)
+assert test_min_tokens == 480
