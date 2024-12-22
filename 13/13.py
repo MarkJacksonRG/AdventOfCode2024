@@ -39,8 +39,11 @@ class Machine:
     def get_cheapest_prize_presses(self) -> ButtonPresses | None:
         m = self.as_matrix()
         p = self.prize.as_vector()
-        b_v = np.linalg.solve(m, p)
-        print(b_v)
+        b_v_float = np.linalg.solve(m, p)
+        b_v = np.round(b_v_float).astype(int)
+        if not np.all(np.isclose(b_v, b_v_float)):
+            return None
+        return ButtonPresses(b_v[0], b_v[1])
 
 
         cheapest_prize_presses: ButtonPresses | None = None
