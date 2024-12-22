@@ -13,7 +13,7 @@ class ButtonPresses:
     b: int
 
     def as_vector(self) -> np.ndarray:
-        return np.array([self.a, self.b])
+        return np.array([self.a, self.b], dtype=np.float64)
 
     def __repr__(self):
         return f"ButtonPresses(a={self.a}, b={self.b})"
@@ -33,34 +33,17 @@ class Machine:
         b = presses.as_vector()
         return Point(*np.dot(m, b))
 
-    def as_matrix(self):
-        return np.array([[self.a.x, self.b.x], [self.a.y, self.b.y]])
+    def as_matrix(self) -> np.ndarray:
+        return np.array([[self.a.x, self.b.x], [self.a.y, self.b.y]], dtype=np.float64)
 
     def get_cheapest_prize_presses(self) -> ButtonPresses | None:
         m = self.as_matrix()
-        p = self.prize.as_vector()
+        p = self.prize.as_vector(dtype=np.float64)
         b_v_float = np.linalg.solve(m, p)
         b_v = np.round(b_v_float).astype(int)
-        if not np.all(np.isclose(b_v, b_v_float)):
+        if not np.all(np.absolute(b_v_float - b_v) < 0.01):
             return None
         return ButtonPresses(b_v[0], b_v[1])
-
-
-        cheapest_prize_presses: ButtonPresses | None = None
-        for a in range(101):
-            b = 0
-            presses = ButtonPresses(a, b)
-            position = self.get_position(presses)
-            while b in range(101) and position.x <= self.prize.x and position.y <= self.prize.y:
-                position = self.get_position(presses)
-                if position == self.prize:
-                    if cheapest_prize_presses is None or cheapest_prize_presses.price() < cheapest_prize_presses.price():
-                        cheapest_prize_presses = presses
-
-                b += 1
-                presses = ButtonPresses(a, b)
-
-        return cheapest_prize_presses
 
     def get_price_of_cheapest_prize_presses(self) -> int:
         cheapest_prize_presses = self.get_cheapest_prize_presses()
@@ -124,3 +107,21 @@ real_machines = get_machines_from_lines(real_lines)
 real_min_tokens = get_min_tokens_to_win_all_prizes(real_machines)
 assert real_min_tokens == 31761
 print(f"Real min tokens: {real_min_tokens}")
+
+
+def get_part_2_machines(machines):
+    return [
+        Machine(m.a, m.b, Point(m.prize.x + 10000000000000, m.prize.y + 10000000000000)) for m in machines
+    ]
+
+test_machines_2 = get_part_2_machines(test_machines)
+assert test_machines_2[0].a == test_machines[0].a
+assert test_machines_2[0].b == test_machines[0].b
+assert test_machines_2[0].prize == Point(10000000008400, 10000000005400)
+assert test_machines_2[0].get_cheapest_prize_presses() is None
+assert test_machines_2[1].get_cheapest_prize_presses() is not None
+
+real_machines_2 = get_part_2_machines(real_machines)
+real_min_tokens_2 = get_min_tokens_to_win_all_prizes(real_machines_2)
+assert real_min_tokens_2 == 90798500745591
+print(f"Real min tokens: {real_min_tokens_2}")

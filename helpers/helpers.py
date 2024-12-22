@@ -14,6 +14,6 @@ class Point:
     x: int
     y: int
 
-    def as_vector(self) -> np.ndarray:
-        return np.array([self.x, self.y])
+    def as_vector(self, dtype=None) -> np.ndarray:
+        return np.array([self.x, self.y], dtype=dtype)
 
