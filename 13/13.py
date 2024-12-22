@@ -12,6 +12,9 @@ class ButtonPresses:
     a: int
     b: int
 
+    def as_vector(self) -> np.ndarray:
+        return np.array([self.a, self.b])
+
     def __repr__(self):
         return f"ButtonPresses(a={self.a}, b={self.b})"
 
@@ -26,16 +29,20 @@ class Machine:
     prize: Point
 
     def get_position(self, presses: ButtonPresses) -> Point:
-        m = np.array([[self.a.x, self.a.y], [self.b.x, self.b.y]])
-        b = np.array([presses.a, presses.b])
+        m = self.as_matrix()
+        b = presses.as_vector()
         return Point(*np.dot(m, b))
 
-        return Point(
-            presses.a * self.a.x + presses.b * self.b.x,
-            presses.a * self.a.y + presses.b * self.b.y
-        )
+    def as_matrix(self):
+        return np.array([[self.a.x, self.b.x], [self.a.y, self.b.y]])
 
     def get_cheapest_prize_presses(self) -> ButtonPresses | None:
+        # m = self.as_matrix()
+        # p = self.prize.as_vector()
+        # b_v = np.linalg.solve(m, p)
+        # print(b_v)
+
+
         cheapest_prize_presses: ButtonPresses | None = None
         for a in range(101):
             b = 0
@@ -95,7 +102,7 @@ for m in test_machines:
     print(m)
 
 assert test_machines[0] == Machine(a=Point(x=94, y=34), b=Point(x=22, y=67), prize=Point(x=8400, y=5400))
-assert test_machines[0].get_position( ButtonPresses(1, 1)) == Point(x=94+22, y=34+67)
+assert test_machines[0].get_position(ButtonPresses(1, 1)) == Point(x=94+22, y=34+67)
 assert test_machines[0].get_position(ButtonPresses(80, 40)) == test_machines[0].prize
 
 assert test_machines[0].get_cheapest_prize_presses() == ButtonPresses(80, 40)
