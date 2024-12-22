@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+import numpy as np
+
 from helpers.helpers import get_input_lines, Point
 
 test_lines = get_input_lines("test.txt")
@@ -24,6 +26,10 @@ class Machine:
     prize: Point
 
     def get_position(self, presses: ButtonPresses) -> Point:
+        m = np.array([[self.a.x, self.a.y], [self.b.x, self.b.y]])
+        b = np.array([presses.a, presses.b])
+        return Point(*np.dot(m, b))
+
         return Point(
             presses.a * self.a.x + presses.b * self.b.x,
             presses.a * self.a.y + presses.b * self.b.y
