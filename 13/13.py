@@ -37,10 +37,10 @@ class Machine:
         return np.array([[self.a.x, self.b.x], [self.a.y, self.b.y]])
 
     def get_cheapest_prize_presses(self) -> ButtonPresses | None:
-        # m = self.as_matrix()
-        # p = self.prize.as_vector()
-        # b_v = np.linalg.solve(m, p)
-        # print(b_v)
+        m = self.as_matrix()
+        p = self.prize.as_vector()
+        b_v = np.linalg.solve(m, p)
+        print(b_v)
 
 
         cheapest_prize_presses: ButtonPresses | None = None
