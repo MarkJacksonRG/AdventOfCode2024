@@ -44,6 +44,16 @@ def get_safety_factor(positions: list[np.ndarray], space: np.ndarray) -> int:
             br += 1
     return tl * tr * bl * br
 
+
+real_input = get_input_lines("input.txt")
+real_robots = get_robots_from_lines(real_input)
+real_space = np.array([101, 103])
+
+real_p100 = [get_p_after_t(r, 100, real_space) for r in real_robots]
+real_safety = get_safety_factor(real_p100, real_space)
+assert real_safety == 221142636
+print(f"Part 1: {real_safety=}")
+
 @pytest.fixture
 def test_input():
     return get_input_lines("test.txt")
@@ -99,12 +109,3 @@ def test_get_safety_factor_after_t_hundred_seconds(test_input):
     p100 = [get_p_after_t(r, 100, space) for r in robots]
 
     assert get_safety_factor(p100, space) == 12
-
-real_input = get_input_lines("input.txt")
-real_robots = get_robots_from_lines(real_input)
-real_space = np.array([101, 103])
-
-real_p100 = [get_p_after_t(r, 100, real_space) for r in real_robots]
-real_safety = get_safety_factor(real_p100, real_space)
-assert real_safety == 221142636
-print(f"Part 1: {real_safety=}")
