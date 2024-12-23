@@ -8,8 +8,8 @@ from helpers.helpers import get_input_lines
 
 @dataclass(frozen=True)
 class Robot:
-    pos: np.array
-    direction: np.array
+    p: np.array
+    v: np.array
 
 def to_2d_array(s: str) -> np.array:
     assert s[1] == "="
@@ -34,7 +34,7 @@ def test_get_input_lines(test_input):
 def test_get_robots_from_lines(test_input):
     robots = get_robots_from_lines(test_input)
     assert len(robots) == 12
-    assert (robots[0].pos == np.array([0, 4])).all()
-    assert (robots[0].direction == np.array([3, -3])).all()
-    assert (robots[1].pos == np.array([6, 3])).all()
-    assert (robots[1].direction == np.array([-1, -3])).all()
+    assert (robots[0].p == np.array([0, 4])).all()
+    assert (robots[0].v == np.array([3, -3])).all()
+    assert (robots[1].p == np.array([6, 3])).all()
+    assert (robots[1].v == np.array([-1, -3])).all()
