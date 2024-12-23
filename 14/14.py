@@ -54,6 +54,27 @@ real_safety = get_safety_factor(real_p100, real_space)
 assert real_safety == 221142636
 print(f"Part 1: {real_safety=}")
 
+
+def print_positions(positions: list[np.ndarray], space: np.ndarray, file):
+    for y in range(space[1]):
+        line = ""
+        for x in range(space[0]):
+            n = count_robots_on_position([p for p in positions], np.array([x, y]))
+            line += str(n) if n > 0 else "."
+        file.write(line + "\n")
+
+print()
+t = 0
+# Open the file in write mode
+with open('output.txt', 'w') as file:
+    while t < 100:
+        print(f"t={t}")
+        file.write("\n")
+        file.write(f"t={t}\n")
+        print_positions([get_p_after_t(r, t, real_space) for r in real_robots], real_space, file)
+        t += 1
+
+
 @pytest.fixture
 def test_input():
     return get_input_lines("test.txt")
